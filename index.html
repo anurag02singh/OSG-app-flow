@@ -3,61 +3,55 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Onsitego — Interactive Prototype</title>
+<title>Onsitego — Interactive Prototype v2</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
 <style>
 :root{
-  --teal-900:#143a34; --teal-800:#1a4d44; --teal-700:#235c50; --teal-600:#2d6b5d;
-  --teal-500:#3e8576; --teal-100:#dff0ea; --teal-50:#eef7f3;
-  --bg:#f2efe7; --card:#ffffff; --text:#14302b; --muted:#7f8f88; --line:#e8e4d9;
-  --yellow:#f4c430; --yellow-soft:#fdf3cf; --yellow-text:#b07d09;
+  --primary:#006877; --primary-light:#007d8f; --primary-lighter:#008fa3;
+  --primary-tint:#d0eef2; --primary-pale:#e8f6f8;
+  --secondary:#ffc20e; --secondary-soft:#fff5cc; --secondary-text:#a07800;
+  --bg:#f0f6f8; --card:#ffffff; --text:#0d3040; --muted:#6b8a93; --line:#d8e8ec;
   --live-bg:#e1f4e9; --live-text:#1f9a59;
   --blue-bg:#e6eefb; --blue-text:#3266c9;
   --red-bg:#fdecec; --red-text:#d64545;
-  --shadow:0 6px 22px rgba(20,48,43,.07);
+  --shadow:0 6px 22px rgba(0,104,119,.08);
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
 body{
-  font-family:'Plus Jakarta Sans',sans-serif;
-  background:#cdd8d2;
-  background-image:radial-gradient(circle at 20% 10%,#dde7e1,transparent 55%),radial-gradient(circle at 80% 90%,#d3e0d9,transparent 55%);
+  font-family:'Montserrat',sans-serif;font-weight:400;
+  background:#b8d0d6;
+  background-image:radial-gradient(circle at 20% 10%,#c5dce2,transparent 55%),radial-gradient(circle at 80% 90%,#b0ccd2,transparent 55%);
   min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px 0;color:var(--text);
 }
-/* phone frame */
-.phone{
-  position:relative;width:390px;height:844px;background:#0c1f1b;border-radius:54px;
-  padding:13px;box-shadow:0 30px 70px rgba(12,31,27,.45),0 4px 0 rgba(255,255,255,.04) inset;
-}
+.phone{position:relative;width:390px;height:844px;background:#0c1f22;border-radius:54px;padding:13px;box-shadow:0 30px 70px rgba(0,40,50,.45),0 4px 0 rgba(255,255,255,.04) inset;}
 .screenwrap{position:relative;width:100%;height:100%;background:var(--bg);border-radius:42px;overflow:hidden;display:flex;flex-direction:column;}
 #screens{position:relative;flex:1;min-height:0;}
-.notch{position:absolute;top:0;left:50%;transform:translateX(-50%);width:150px;height:30px;background:#0c1f1b;border-radius:0 0 20px 20px;z-index:60;}
+.notch{position:absolute;top:0;left:50%;transform:translateX(-50%);width:150px;height:30px;background:#0c1f22;border-radius:0 0 20px 20px;z-index:60;}
 .statusbar{height:50px;display:flex;align-items:flex-end;justify-content:space-between;padding:0 26px 6px;font-size:13px;font-weight:700;color:var(--text);position:relative;z-index:50;flex:0 0 auto;}
 .statusbar .dots{display:flex;gap:5px;align-items:center;}
-.statusbar .dots span{display:inline-block;}
 
-/* screen scroll area */
 .screen{position:absolute;inset:0;display:none;flex-direction:column;}
 .screen.active{display:flex;}
 .scroll{flex:1;overflow-y:auto;overflow-x:hidden;padding-bottom:96px;}
 .scroll::-webkit-scrollbar{width:0;}
 
-/* header */
+/* appbar */
 .appbar{display:flex;align-items:center;justify-content:space-between;padding:6px 20px 10px;}
-.logo{display:flex;align-items:center;gap:7px;font-weight:800;font-size:21px;letter-spacing:-.5px;color:var(--teal-800);}
-.logo .mark{width:26px;height:26px;border-radius:8px;background:linear-gradient(135deg,var(--teal-600),var(--teal-800));display:flex;align-items:center;justify-content:center;}
-.logo b{color:var(--yellow);}
+.logo{display:flex;align-items:center;font-weight:700;font-size:22px;letter-spacing:-.3px;color:var(--primary);}
+.logo b{color:var(--secondary);font-weight:700;}
 .appbar-right{display:flex;align-items:center;gap:10px;}
-.lang{display:flex;align-items:center;gap:5px;background:#fff;border:1px solid var(--line);border-radius:20px;padding:6px 10px;font-size:12px;font-weight:700;cursor:pointer;color:var(--teal-800);}
+.lang{display:flex;align-items:center;gap:5px;background:#fff;border:1px solid var(--line);border-radius:20px;padding:6px 10px;font-size:12px;cursor:pointer;color:var(--primary);}
 .iconbtn{width:42px;height:42px;border-radius:50%;background:#fff;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;}
 .iconbtn .dot{position:absolute;top:9px;right:10px;width:8px;height:8px;border-radius:50%;background:var(--red-text);border:2px solid #fff;}
+.back-dash-btn{background:var(--primary-pale);border:1px solid var(--primary-tint);border-radius:20px;padding:5px 11px;font-size:11px;color:var(--primary);cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:5px;}
 
 /* section titles */
-.kicker{font-size:11px;font-weight:800;letter-spacing:1.5px;color:var(--teal-500);text-transform:uppercase;margin:0 20px 2px;}
-.sec-title{font-size:21px;font-weight:800;letter-spacing:-.4px;margin:0 20px 14px;display:flex;align-items:center;justify-content:space-between;}
-.sec-title .count{font-size:12px;font-weight:700;background:var(--teal-100);color:var(--teal-700);padding:5px 11px;border-radius:20px;}
-.sec-title .viewall{font-size:13px;font-weight:700;color:var(--teal-600);cursor:pointer;}
+.kicker{font-size:11px;font-weight:700;letter-spacing:1.5px;color:var(--primary-lighter);text-transform:uppercase;margin:0 20px 2px;}
+.sec-title{font-size:20px;font-weight:700;letter-spacing:-.3px;margin:0 20px 14px;display:flex;align-items:center;justify-content:space-between;}
+.sec-title .count{font-size:12px;background:var(--primary-tint);color:var(--primary);padding:5px 11px;border-radius:20px;}
+.sec-title .viewall{font-size:13px;color:var(--primary-light);cursor:pointer;}
 .block{margin-top:26px;}
 
 /* quick actions */
@@ -65,121 +59,124 @@ body{
 .qa{background:#fff;border:1px solid var(--line);border-radius:20px;padding:16px 10px;text-align:center;cursor:pointer;position:relative;transition:.18s;box-shadow:var(--shadow);}
 .qa:active{transform:scale(.96);}
 .qa .ic{width:54px;height:54px;border-radius:16px;display:flex;align-items:center;justify-content:center;margin:0 auto 9px;}
-.qa.p1 .ic{background:var(--teal-100);} .qa.p2 .ic{background:var(--yellow-soft);} .qa.p3 .ic{background:var(--blue-bg);}
-.qa .lbl{font-size:12.5px;font-weight:700;line-height:1.2;}
-.qa .badge{position:absolute;top:10px;right:12px;background:var(--teal-700);color:#fff;font-size:11px;font-weight:800;min-width:21px;height:21px;border-radius:11px;display:flex;align-items:center;justify-content:center;padding:0 5px;}
+.qa.p1 .ic{background:var(--primary-tint);} .qa.p2 .ic{background:var(--secondary-soft);} .qa.p3 .ic{background:var(--blue-bg);}
+.qa .lbl{font-size:12px;line-height:1.2;}
+.qa .badge{position:absolute;top:10px;right:12px;background:var(--primary);color:#fff;font-size:11px;font-weight:700;min-width:21px;height:21px;border-radius:11px;display:flex;align-items:center;justify-content:center;padding:0 5px;}
 
 /* SR rail */
 .rail{display:flex;gap:13px;overflow-x:auto;padding:2px 20px 8px;scroll-snap-type:x mandatory;}
 .rail::-webkit-scrollbar{display:none;}
 .srcard{flex:0 0 88%;scroll-snap-align:start;background:#fff;border:1px solid var(--line);border-radius:22px;padding:17px;box-shadow:var(--shadow);}
 .srcard .top{display:flex;justify-content:space-between;align-items:flex-start;}
-.srcard h4{font-size:17px;font-weight:800;}
-.srcard .srno{font-size:12.5px;color:var(--muted);font-weight:600;margin-top:7px;}
-.srcard .meta{font-size:13px;font-weight:600;margin-top:2px;}
-.pill{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:800;padding:5px 10px;border-radius:20px;}
-.pill.live{background:var(--live-bg);color:var(--live-text);} .pill .d{width:7px;height:7px;border-radius:50%;background:currentColor;}
+.srcard h4{font-size:17px;font-weight:700;}
+.srcard .srno{font-size:12px;color:var(--muted);margin-top:7px;}
+.srcard .meta{font-size:13px;margin-top:2px;}
+.pill{display:inline-flex;align-items:center;gap:5px;font-size:11px;padding:5px 10px;border-radius:20px;}
+.pill.live{background:var(--live-bg);color:var(--live-text);}
 .pill.blue{background:var(--blue-bg);color:var(--blue-text);}
-.stamp{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;background:var(--yellow-soft);color:var(--yellow-text);padding:7px 12px;border-radius:20px;margin-top:14px;}
+.pill.closed-pill{background:var(--red-bg);color:var(--red-text);}
+.pill .d{width:7px;height:7px;border-radius:50%;background:currentColor;}
+.stamp{display:inline-flex;align-items:center;gap:6px;font-size:12px;background:var(--secondary-soft);color:var(--secondary-text);padding:7px 12px;border-radius:20px;margin-top:14px;}
 .stamp .d{width:7px;height:7px;border-radius:50%;background:currentColor;}
 .srcard .row{display:flex;align-items:center;justify-content:space-between;margin-top:14px;gap:10px;}
-.btn{background:var(--teal-700);color:#fff;border:none;border-radius:14px;padding:11px 18px;font-size:13.5px;font-weight:700;font-family:inherit;cursor:pointer;display:inline-flex;align-items:center;gap:7px;transition:.15s;}
-.btn:active{transform:scale(.96);} .btn.ghost{background:#fff;color:var(--teal-700);border:1.5px solid var(--teal-700);}
+.btn{background:var(--primary);color:#fff;border:none;border-radius:14px;padding:11px 18px;font-size:13px;font-family:inherit;cursor:pointer;display:inline-flex;align-items:center;gap:7px;transition:.15s;}
+.btn:active{transform:scale(.96);} .btn.ghost{background:#fff;color:var(--primary);border:1.5px solid var(--primary);}
 .btn.full{width:100%;justify-content:center;}
-.btn.sm{padding:9px 14px;font-size:12.5px;}
-.btn.yellow{background:var(--yellow);color:#5a4400;}
+.btn.sm{padding:9px 14px;font-size:12px;}
+.btn.yellow{background:var(--secondary);color:#5a4000;}
 .dots-ind{display:flex;gap:6px;justify-content:center;margin-top:12px;}
-.dots-ind i{width:7px;height:7px;border-radius:50%;background:#cdd6d1;}.dots-ind i.on{width:20px;border-radius:4px;background:var(--teal-600);}
+.dots-ind i{width:7px;height:7px;border-radius:50%;background:#cdd6d1;}.dots-ind i.on{width:20px;border-radius:4px;background:var(--primary-light);}
 
 /* stats banner */
-.statbanner{margin:0 20px;background:linear-gradient(120deg,var(--teal-900),var(--teal-700));border-radius:22px;padding:20px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;box-shadow:var(--shadow);}
+.statbanner{margin:0 20px;background:linear-gradient(120deg,var(--primary),var(--primary-light));border-radius:22px;padding:20px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;box-shadow:var(--shadow);}
 .statbanner .s{text-align:center;}
-.statbanner .n{font-size:23px;font-weight:800;color:var(--yellow);}
-.statbanner .t{font-size:11px;color:#cfe3db;font-weight:600;margin-top:3px;}
+.statbanner .n{font-size:23px;font-weight:700;color:var(--secondary);}
+.statbanner .t{font-size:11px;color:#b8e4ec;margin-top:3px;}
 
 /* promise */
 .promise{display:grid;grid-template-columns:1fr 1fr 1fr;gap:11px;padding:0 20px;}
 .pcard{background:#fff;border:1px solid var(--line);border-radius:18px;padding:16px 8px;text-align:center;box-shadow:var(--shadow);}
 .pcard .ic{width:46px;height:46px;border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 9px;}
-.pcard:nth-child(1) .ic{background:var(--teal-100);} .pcard:nth-child(2) .ic{background:var(--yellow-soft);} .pcard:nth-child(3) .ic{background:var(--teal-100);}
-.pcard .lbl{font-size:12px;font-weight:700;line-height:1.25;}
+.pcard:nth-child(1) .ic{background:var(--primary-tint);} .pcard:nth-child(2) .ic{background:var(--secondary-soft);} .pcard:nth-child(3) .ic{background:var(--primary-tint);}
+.pcard .lbl{font-size:12px;line-height:1.25;}
 
 /* partners */
 .partners{display:flex;gap:10px;overflow-x:auto;padding:0 20px;}
 .partners::-webkit-scrollbar{display:none;}
-.partner{flex:0 0 auto;background:#fff;border:1px solid var(--line);border-radius:14px;padding:13px 18px;font-weight:800;font-size:14px;box-shadow:var(--shadow);}
+.partner{flex:0 0 auto;background:#fff;border:1px solid var(--line);border-radius:14px;padding:13px 18px;font-size:14px;box-shadow:var(--shadow);}
 
 /* feedback */
-.feedback{margin:0 20px;background:linear-gradient(120deg,var(--teal-600),var(--teal-500));border-radius:22px;padding:18px;display:flex;align-items:center;gap:14px;cursor:pointer;box-shadow:var(--shadow);}
+.feedback{margin:0 20px;background:linear-gradient(120deg,var(--primary),var(--primary-light));border-radius:22px;padding:18px;display:flex;align-items:center;gap:14px;cursor:pointer;box-shadow:var(--shadow);}
 .feedback .ic{width:46px;height:46px;border-radius:14px;background:rgba(255,255,255,.18);display:flex;align-items:center;justify-content:center;flex:0 0 auto;}
-.feedback .tx{flex:1;color:#fff;} .feedback h4{font-size:15.5px;font-weight:800;} .feedback p{font-size:12px;opacity:.9;margin-top:2px;}
-.feedback .go{width:36px;height:36px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;color:var(--teal-700);flex:0 0 auto;}
+.feedback .tx{flex:1;color:#fff;} .feedback h4{font-size:15px;font-weight:700;} .feedback p{font-size:12px;opacity:.9;margin-top:2px;}
+.feedback .go{width:36px;height:36px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;color:var(--primary);flex:0 0 auto;}
 
 /* ratings */
 .ratings{display:flex;gap:11px;padding:0 20px;}
 .rate{flex:1;background:#fff;border:1px solid var(--line);border-radius:16px;padding:13px;display:flex;align-items:center;gap:9px;box-shadow:var(--shadow);}
-.rate .lg{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:800;color:#fff;font-size:14px;flex:0 0 auto;}
-.rate .sc{font-size:15px;font-weight:800;} .rate .sc small{font-size:11px;color:var(--muted);font-weight:600;} .rate .stars{font-size:10px;color:var(--yellow);}
+.rate .lg{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff;font-size:14px;flex:0 0 auto;}
+.rate .sc{font-size:15px;font-weight:700;} .rate .sc small{font-size:11px;color:var(--muted);} .rate .stars{font-size:10px;color:var(--secondary);}
 
-/* footer */
+/* tabbar */
 .tabbar{position:absolute;bottom:0;left:0;right:0;height:78px;background:#fff;border-top:1px solid var(--line);display:flex;align-items:center;justify-content:space-around;padding-bottom:8px;z-index:40;}
-.tab{display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;color:var(--muted);font-size:11px;font-weight:700;flex:1;}
-.tab.on{color:var(--teal-700);}
+.tab{display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;color:var(--muted);font-size:11px;flex:1;}
+.tab.on{color:var(--primary);}
 .tab .lbl{line-height:1.05;text-align:center;}
 
-/* floating chat */
-.fab{position:absolute;bottom:96px;right:18px;width:62px;height:62px;border-radius:50%;background:linear-gradient(135deg,var(--teal-600),var(--teal-800));display:flex;align-items:center;justify-content:center;box-shadow:0 8px 22px rgba(20,48,43,.35);cursor:pointer;z-index:45;}
-.fab .d{position:absolute;top:6px;right:8px;width:13px;height:13px;border-radius:50%;background:var(--yellow);border:2px solid #fff;}
+/* fab */
+.fab{position:absolute;bottom:96px;right:18px;width:62px;height:62px;border-radius:50%;background:linear-gradient(135deg,var(--primary-light),var(--primary));display:flex;align-items:center;justify-content:center;box-shadow:0 8px 22px rgba(0,104,119,.35);cursor:pointer;z-index:45;}
+.fab .d{position:absolute;top:6px;right:8px;width:13px;height:13px;border-radius:50%;background:var(--secondary);border:2px solid #fff;}
 .fab:active{transform:scale(.93);}
 
-/* inner page header */
+/* page head */
 .pagehead{display:flex;align-items:center;gap:12px;padding:6px 18px 14px;}
 .pagehead .back{width:42px;height:42px;border-radius:50%;background:#fff;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;cursor:pointer;flex:0 0 auto;}
-.pagehead h2{font-size:20px;font-weight:800;letter-spacing:-.4px;}
-.pagehead .sub{font-size:12px;color:var(--muted);font-weight:600;}
+.pagehead h2{font-size:20px;font-weight:700;letter-spacing:-.3px;}
+.pagehead .sub{font-size:12px;color:var(--muted);}
 
-/* generic card */
+/* card */
 .card{background:#fff;border:1px solid var(--line);border-radius:22px;padding:18px;margin:0 18px 14px;box-shadow:var(--shadow);}
 .card-h{display:flex;align-items:center;justify-content:space-between;cursor:pointer;}
-.card-h h3{font-size:15.5px;font-weight:800;}
+.card-h h3{font-size:15px;font-weight:700;}
 .chev{transition:.25s;color:var(--muted);}
 .collapsed .chev{transform:rotate(-90deg);}
 .collapsed .card-body{display:none;}
 .kv{display:flex;justify-content:space-between;font-size:13px;padding:7px 0;border-bottom:1px dashed var(--line);}
-.kv:last-child{border:none;} .kv .k{color:var(--muted);font-weight:600;} .kv .v{font-weight:700;}
-.warn{display:flex;align-items:center;gap:8px;background:var(--yellow-soft);color:var(--yellow-text);font-size:12px;font-weight:700;padding:10px 12px;border-radius:12px;margin-top:12px;}
-.copay{display:flex;align-items:center;justify-content:space-between;background:var(--red-bg);color:var(--red-text);font-size:13px;font-weight:700;padding:12px 14px;border-radius:14px;margin-top:12px;}
+.kv:last-child{border:none;} .kv .k{color:var(--muted);} .kv .v{font-weight:700;}
+.warn{display:flex;align-items:center;gap:8px;background:var(--secondary-soft);color:var(--secondary-text);font-size:12px;padding:10px 12px;border-radius:12px;margin-top:12px;}
+.copay{display:flex;align-items:center;justify-content:space-between;background:var(--red-bg);color:var(--red-text);font-size:13px;padding:12px 14px;border-radius:14px;margin-top:12px;}
 
 /* timeline */
 .tl{margin-top:8px;} .tl .item{display:flex;gap:13px;padding-bottom:4px;}
 .tl .marker{display:flex;flex-direction:column;align-items:center;}
-.tl .mk{width:14px;height:14px;border-radius:50%;border:3px solid var(--teal-600);background:#fff;margin-top:3px;}
-.tl .item.done .mk{background:var(--teal-600);} .tl .item.now .mk{background:var(--yellow);border-color:var(--yellow);box-shadow:0 0 0 4px var(--yellow-soft);}
+.tl .mk{width:14px;height:14px;border-radius:50%;border:3px solid var(--primary-light);background:#fff;margin-top:3px;}
+.tl .item.done .mk{background:var(--primary-light);}
+.tl .item.now .mk{background:var(--secondary);border-color:var(--secondary);box-shadow:0 0 0 4px var(--secondary-soft);}
 .tl .line{flex:1;width:2px;background:var(--line);min-height:18px;}
 .tl .item:last-child .line{display:none;}
-.tl .tx{padding-bottom:16px;} .tl .tx .t{font-size:13.5px;font-weight:800;} .tl .tx .d{font-size:11.5px;color:var(--muted);font-weight:600;margin-top:2px;}
+.tl .tx{padding-bottom:16px;} .tl .tx .t{font-size:13px;font-weight:700;} .tl .tx .d{font-size:11px;color:var(--muted);margin-top:2px;}
 
 /* doc rows */
 .docrow{display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid var(--line);}
 .docrow:last-child{border:none;}
-.docrow .ic{width:40px;height:40px;border-radius:11px;background:var(--teal-50);display:flex;align-items:center;justify-content:center;flex:0 0 auto;color:var(--teal-700);}
-.docrow .info{flex:1;} .docrow .info .t{font-size:13.5px;font-weight:700;} .docrow .info .s{font-size:11.5px;color:var(--muted);font-weight:600;}
+.docrow .ic{width:40px;height:40px;border-radius:11px;background:var(--primary-pale);display:flex;align-items:center;justify-content:center;flex:0 0 auto;color:var(--primary);}
+.docrow .info{flex:1;} .docrow .info .t{font-size:13px;font-weight:700;} .docrow .info .s{font-size:11px;color:var(--muted);}
 .docrow .acts{display:flex;gap:8px;}
-.miniic{width:34px;height:34px;border-radius:10px;background:var(--teal-50);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--teal-700);}
+.miniic{width:34px;height:34px;border-radius:10px;background:var(--primary-pale);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--primary);}
 
 /* capsule */
-.capsule{display:inline-flex;align-items:center;gap:8px;background:var(--teal-50);color:var(--teal-800);font-size:12.5px;font-weight:700;padding:9px 14px;border-radius:20px;margin-top:12px;}
+.capsule{display:inline-flex;align-items:center;gap:8px;background:var(--primary-pale);color:var(--primary);font-size:12px;padding:9px 14px;border-radius:20px;margin-top:12px;}
 
 /* help grid */
 .helpgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:6px;}
-.helpbtn{display:flex;align-items:center;gap:9px;background:#fff;border:1.5px solid var(--line);border-radius:14px;padding:13px;font-size:13px;font-weight:700;cursor:pointer;transition:.15s;}
-.helpbtn:active{transform:scale(.97);border-color:var(--teal-500);}
-.helpbtn .ic{color:var(--teal-700);display:flex;}
+.helpbtn{display:flex;align-items:center;gap:9px;background:#fff;border:1.5px solid var(--line);border-radius:14px;padding:13px;font-size:13px;cursor:pointer;transition:.15s;}
+.helpbtn:active{transform:scale(.97);border-color:var(--primary-light);}
+.helpbtn .ic{color:var(--primary);display:flex;}
 
 /* tabs */
-.tabs{display:flex;gap:8px;background:#e9e5da;border-radius:16px;padding:5px;margin:0 18px 16px;}
-.tabs .t{flex:1;text-align:center;padding:10px;font-size:13.5px;font-weight:700;border-radius:12px;cursor:pointer;color:var(--muted);}
-.tabs .t.on{background:#fff;color:var(--teal-700);box-shadow:0 2px 8px rgba(20,48,43,.08);}
+.tabs{display:flex;gap:8px;background:#dde8eb;border-radius:16px;padding:5px;margin:0 18px 16px;}
+.tabs .t{flex:1;text-align:center;padding:10px;font-size:13px;border-radius:12px;cursor:pointer;color:var(--muted);}
+.tabs .t.on{background:#fff;color:var(--primary);box-shadow:0 2px 8px rgba(0,104,119,.08);}
 .tabpane{display:none;} .tabpane.on{display:block;}
 
 /* search */
@@ -189,51 +186,132 @@ body{
 /* plan card */
 .plancard{background:#fff;border:1px solid var(--line);border-radius:22px;padding:18px;margin:0 18px 14px;box-shadow:var(--shadow);}
 .plancard .ph{display:flex;gap:13px;align-items:flex-start;}
-.plancard .pic{width:50px;height:50px;border-radius:14px;background:var(--teal-100);display:flex;align-items:center;justify-content:center;flex:0 0 auto;color:var(--teal-700);}
-.plancard .pt{flex:1;} .plancard .pt h4{font-size:16px;font-weight:800;} .plancard .pt .c{font-size:12.5px;color:var(--muted);font-weight:600;margin-top:3px;}
+.plancard .pic{width:50px;height:50px;border-radius:14px;background:var(--primary-tint);display:flex;align-items:center;justify-content:center;flex:0 0 auto;color:var(--primary);}
+.plancard .pt{flex:1;} .plancard .pt h4{font-size:16px;font-weight:700;} .plancard .pt .c{font-size:12px;color:var(--muted);margin-top:3px;}
 .daterow{display:flex;gap:10px;margin-top:14px;}
-.daterow .dd{flex:1;background:var(--bg);border-radius:12px;padding:10px 12px;} .daterow .dd .l{font-size:10.5px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.5px;} .daterow .dd .v{font-size:13px;font-weight:800;margin-top:3px;}
-.pmused{font-size:12px;font-weight:700;color:var(--teal-700);background:var(--teal-50);display:inline-block;padding:6px 11px;border-radius:20px;margin-top:12px;}
+.daterow .dd{flex:1;background:var(--bg);border-radius:12px;padding:10px 12px;}
+.daterow .dd .l{font-size:10px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.5px;}
+.daterow .dd .v{font-size:13px;font-weight:700;margin-top:3px;}
+.pmused{font-size:12px;color:var(--primary);background:var(--primary-pale);display:inline-block;padding:6px 11px;border-radius:20px;margin-top:12px;}
 .coverage{margin-top:12px;border-top:1px solid var(--line);padding-top:12px;}
-.coverage ul{list-style:none;margin-top:8px;} .coverage li{font-size:12.5px;font-weight:600;padding:4px 0;display:flex;gap:8px;align-items:flex-start;}
-.coverage.collapsed ul, .coverage.collapsed .knowmore{display:none;}
-.knowmore{font-size:12.5px;font-weight:800;color:var(--teal-600);cursor:pointer;margin-top:8px;display:inline-block;}
+.coverage ul{list-style:none;margin-top:8px;} .coverage li{font-size:12px;padding:4px 0;display:flex;gap:8px;align-items:flex-start;}
+.coverage.collapsed ul,.coverage.collapsed .knowmore{display:none;}
+.knowmore{font-size:12px;font-weight:700;color:var(--primary-light);cursor:pointer;margin-top:8px;display:inline-block;}
 .ctarow{display:flex;gap:10px;margin-top:14px;}
 
 /* help banner */
-.helpbanner{margin:18px 18px 6px;background:var(--teal-50);border:1.5px dashed var(--teal-500);border-radius:18px;padding:15px 17px;display:flex;align-items:center;gap:13px;cursor:pointer;}
-.helpbanner .ic{width:42px;height:42px;border-radius:12px;background:#fff;display:flex;align-items:center;justify-content:center;color:var(--teal-700);flex:0 0 auto;}
-.helpbanner .tx{flex:1;} .helpbanner h4{font-size:14px;font-weight:800;} .helpbanner p{font-size:11.5px;color:var(--muted);font-weight:600;margin-top:1px;}
+.helpbanner{margin:18px 18px 6px;background:var(--primary-pale);border:1.5px dashed var(--primary-light);border-radius:18px;padding:15px 17px;display:flex;align-items:center;gap:13px;cursor:pointer;}
+.helpbanner .ic{width:42px;height:42px;border-radius:12px;background:#fff;display:flex;align-items:center;justify-content:center;color:var(--primary);flex:0 0 auto;}
+.helpbanner .tx{flex:1;} .helpbanner h4{font-size:14px;font-weight:700;} .helpbanner p{font-size:11px;color:var(--muted);margin-top:1px;}
 
 /* chatbot */
-.chatscreen{background:var(--teal-50);}
+.chatscreen{background:var(--primary-pale);}
 .chathead{display:flex;align-items:center;gap:12px;padding:6px 18px 12px;background:#fff;border-bottom:1px solid var(--line);}
-.chathead .av{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--teal-600),var(--teal-800));display:flex;align-items:center;justify-content:center;flex:0 0 auto;}
-.chathead .nm{font-size:16px;font-weight:800;} .chathead .st{font-size:11.5px;color:var(--live-text);font-weight:700;display:flex;align-items:center;gap:5px;}
+.chathead .av{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--primary-light),var(--primary));display:flex;align-items:center;justify-content:center;flex:0 0 auto;}
+.chathead .nm{font-size:16px;font-weight:700;} .chathead .st{font-size:11px;color:var(--live-text);display:flex;align-items:center;gap:5px;}
 .chathead .st .d{width:7px;height:7px;border-radius:50%;background:var(--live-text);}
 .chatbody{flex:1;overflow-y:auto;padding:18px;display:flex;flex-direction:column;gap:12px;}
-.entrytag{align-self:center;background:#fff;border:1px solid var(--line);border-radius:20px;padding:7px 14px;font-size:11.5px;font-weight:700;color:var(--teal-700);}
-.bubble{max-width:80%;padding:12px 15px;border-radius:18px;font-size:13.5px;font-weight:500;line-height:1.4;}
+.entrytag{align-self:center;background:#fff;border:1px solid var(--line);border-radius:20px;padding:7px 14px;font-size:11px;color:var(--primary);}
+.bubble{max-width:80%;padding:12px 15px;border-radius:18px;font-size:13px;line-height:1.4;}
 .bubble.bot{align-self:flex-start;background:#fff;border:1px solid var(--line);border-bottom-left-radius:5px;}
-.bubble.user{align-self:flex-end;background:var(--teal-700);color:#fff;border-bottom-right-radius:5px;}
+.bubble.user{align-self:flex-end;background:var(--primary);color:#fff;border-bottom-right-radius:5px;}
 .quickreplies{display:flex;flex-wrap:wrap;gap:8px;padding:0 18px 14px;}
-.qr{background:#fff;border:1.5px solid var(--teal-500);color:var(--teal-700);border-radius:20px;padding:9px 14px;font-size:12.5px;font-weight:700;cursor:pointer;}
+.qr{background:#fff;border:1.5px solid var(--primary-light);color:var(--primary);border-radius:20px;padding:9px 14px;font-size:12px;cursor:pointer;}
 .chatinput{display:flex;gap:9px;padding:12px 16px 16px;background:#fff;border-top:1px solid var(--line);}
 .chatinput input{flex:1;border:1px solid var(--line);border-radius:22px;padding:12px 16px;font-family:inherit;font-size:14px;outline:none;background:var(--bg);}
-.chatinput .send{width:46px;height:46px;border-radius:50%;background:var(--teal-700);display:flex;align-items:center;justify-content:center;flex:0 0 auto;cursor:pointer;}
+.chatinput .send{width:46px;height:46px;border-radius:50%;background:var(--primary);display:flex;align-items:center;justify-content:center;flex:0 0 auto;cursor:pointer;}
+.bubble.typing{color:var(--muted);font-style:italic;}
+.botcard{align-self:stretch;background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px;box-shadow:var(--shadow);font-size:13px;animation:fadein .3s ease both;}
+.addrform{display:flex;flex-direction:column;gap:8px;}
+.addrform input{border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-family:inherit;font-size:13px;outline:none;width:100%;background:var(--bg);color:var(--text);}
+.addrform .row{display:flex;gap:8px;}
+.mapmock{height:124px;border-radius:12px;background:linear-gradient(135deg,#d0e8ee,#c0dce4);position:relative;display:flex;align-items:flex-end;justify-content:center;padding:10px;font-size:11px;color:var(--primary);overflow:hidden;}
+.mapmock::before{content:"";position:absolute;inset:0;background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:22px 22px;opacity:.55;}
+.mapmock .pin{position:absolute;top:40%;left:50%;transform:translate(-50%,-100%);color:var(--red-text);z-index:2;}
+.rzp{border-radius:14px;overflow:hidden;border:1px solid var(--line);}
+.rzp-h{background:#0c2f63;color:#fff;font-weight:700;font-size:14px;padding:12px 14px;display:flex;justify-content:space-between;align-items:center;}
+.rzp-h span{font-size:10px;background:rgba(255,255,255,.2);padding:3px 8px;border-radius:10px;}
+.rzp-b{padding:14px;}
+.rzp-amt{font-size:24px;font-weight:700;color:var(--text);}
+.rzp-row{font-size:12px;color:var(--muted);margin:6px 0 12px;}
+.srsum-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;}
+.srsum-no{font-size:15px;font-weight:700;}
+.srsum-cat{font-size:12px;color:var(--muted);margin-top:3px;}
+.planpick{align-self:stretch;display:flex;align-items:center;gap:12px;background:#fff;border:1px solid var(--line);border-radius:16px;padding:13px 14px;box-shadow:var(--shadow);cursor:pointer;transition:.15s;animation:fadein .3s ease both;}
+.planpick:active{transform:scale(.98);border-color:var(--primary-light);}
+.pp-ic{width:42px;height:42px;border-radius:12px;background:var(--primary-tint);display:flex;align-items:center;justify-content:center;color:var(--primary);flex:0 0 auto;}
+.pp-tx{flex:1;min-width:0;}
+.pp-name{font-size:14px;font-weight:700;}
+.pp-sub{font-size:12px;color:var(--muted);margin-top:2px;}
+.pp-meta{font-size:11px;color:var(--muted);margin-top:2px;}
+.pp-go{color:var(--muted);flex:0 0 auto;}
 
 /* profile */
-.prof-hero{background:linear-gradient(135deg,var(--teal-700),var(--teal-900));margin:0 18px 16px;border-radius:24px;padding:24px;color:#fff;display:flex;align-items:center;gap:15px;box-shadow:var(--shadow);}
-.prof-hero .av{width:62px;height:62px;border-radius:50%;background:rgba(255,255,255,.18);display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:800;flex:0 0 auto;}
-.prof-hero h3{font-size:19px;font-weight:800;} .prof-hero p{font-size:12.5px;opacity:.85;margin-top:3px;}
+.prof-hero{background:linear-gradient(135deg,var(--primary),var(--primary-light));margin:0 18px 16px;border-radius:24px;padding:24px;color:#fff;display:flex;align-items:center;gap:15px;box-shadow:var(--shadow);}
+.prof-hero .av{width:62px;height:62px;border-radius:50%;background:rgba(255,255,255,.18);display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:700;flex:0 0 auto;}
+.prof-hero h3{font-size:19px;font-weight:700;} .prof-hero p{font-size:12px;opacity:.85;margin-top:3px;}
 .menu{background:#fff;border:1px solid var(--line);border-radius:20px;margin:0 18px 14px;overflow:hidden;box-shadow:var(--shadow);}
 .menu .mi{display:flex;align-items:center;gap:13px;padding:15px 17px;border-bottom:1px solid var(--line);cursor:pointer;}
-.menu .mi:last-child{border:none;} .menu .mi .ic{width:40px;height:40px;border-radius:11px;background:var(--teal-50);display:flex;align-items:center;justify-content:center;color:var(--teal-700);flex:0 0 auto;}
-.menu .mi .t{flex:1;font-size:14px;font-weight:700;} .menu .mi .ar{color:var(--muted);}
+.menu .mi:last-child{border:none;}
+.menu .mi .ic{width:40px;height:40px;border-radius:11px;background:var(--primary-pale);display:flex;align-items:center;justify-content:center;color:var(--primary);flex:0 0 auto;}
+.menu .mi .t{flex:1;font-size:14px;} .menu .mi .ar{color:var(--muted);}
 
 /* toast */
-.toast{position:absolute;bottom:170px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--teal-900);color:#fff;font-size:12.5px;font-weight:600;padding:11px 18px;border-radius:14px;opacity:0;transition:.25s;z-index:80;pointer-events:none;white-space:nowrap;}
+.toast{position:absolute;bottom:170px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--primary);color:#fff;font-size:12px;padding:11px 18px;border-radius:14px;opacity:0;transition:.25s;z-index:80;pointer-events:none;white-space:nowrap;}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+/* NPS / CCP thin ribbon — above tabbar */
+.nps-ribbon,.ccp-ribbon{
+  position:absolute;bottom:78px;left:0;right:0;
+  background:#fff;border-top:2px solid var(--secondary);
+  display:flex;align-items:center;gap:10px;
+  padding:10px 16px;z-index:48;
+  box-shadow:0 -4px 14px rgba(0,104,119,.1);
+}
+.nps-ribbon .rib-text,.ccp-ribbon .rib-text{flex:1;font-size:12px;color:var(--text);line-height:1.3;}
+.nps-ribbon .rib-cta,.ccp-ribbon .rib-cta{
+  background:var(--primary);color:#fff;border:none;border-radius:10px;
+  padding:8px 18px;font-size:12px;font-family:inherit;cursor:pointer;white-space:nowrap;
+}
+.nps-ribbon .rib-dismiss,.ccp-ribbon .rib-dismiss{font-size:18px;cursor:pointer;color:var(--muted);background:none;border:none;line-height:1;padding:0 2px;}
+
+/* reusable chip option (feedback flow) */
+.ccp-opt{background:var(--primary-pale);border:1px solid var(--primary-tint);color:var(--primary);border-radius:20px;padding:6px 12px;font-size:11px;cursor:pointer;font-family:inherit;}
+.ccp-opt.sel{background:var(--primary);color:#fff;}
+
+/* SR status page — sticky help footer */
+.sr-help-bar{
+  position:absolute;bottom:0;left:0;right:0;height:56px;
+  background:var(--primary);display:flex;align-items:center;justify-content:center;
+  gap:8px;cursor:pointer;z-index:44;
+  box-shadow:0 -4px 14px rgba(0,104,119,.2);
+}
+.sr-help-bar span{font-size:13px;color:#fff;}
+/* Bottom sheet overlay */
+.sheet-overlay{position:absolute;inset:0;background:rgba(0,0,0,.35);z-index:70;display:flex;flex-direction:column;justify-content:flex-end;}
+.sheet{background:#fff;border-radius:24px 24px 0 0;padding:10px 0 28px;}
+.sheet-handle{width:40px;height:4px;background:var(--line);border-radius:2px;margin:0 auto 16px;}
+.sheet-title{font-size:14px;font-weight:700;padding:0 20px 12px;color:var(--text);}
+.sheet-item{display:flex;align-items:center;gap:14px;padding:14px 20px;border-top:1px solid var(--line);cursor:pointer;}
+.sheet-item .si-ic{width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex:0 0 auto;}
+.sheet-item .si-tx h4{font-size:14px;font-weight:700;}
+.sheet-item .si-tx p{font-size:11px;color:var(--muted);margin-top:1px;}
+
+/* DASHBOARD */
+.dashboard{position:absolute;inset:0;overflow-y:auto;display:flex;flex-direction:column;background:var(--bg);}
+.dash-header{padding:30px 20px 24px;background:linear-gradient(135deg,var(--primary),var(--primary-light));}
+.dash-logo{font-size:26px;font-weight:700;color:#fff;margin-bottom:4px;}
+.dash-logo b{color:var(--secondary);font-weight:700;}
+.dash-tagline{font-size:12px;color:rgba(255,255,255,.8);margin-bottom:0;}
+.dash-label{font-size:11px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted);margin:18px 18px 10px;}
+.dash-scenarios{padding:0 14px 24px;display:flex;flex-direction:column;gap:10px;}
+.dash-btn{display:flex;align-items:center;gap:14px;background:#fff;border:1px solid var(--line);border-radius:18px;padding:16px;cursor:pointer;transition:.15s;box-shadow:var(--shadow);}
+.dash-btn:active{transform:scale(.98);border-color:var(--primary-light);}
+.dash-btn .dbi{width:50px;height:50px;border-radius:14px;display:flex;align-items:center;justify-content:center;flex:0 0 auto;font-size:22px;}
+.dash-btn .dbt{flex:1;}
+.dash-btn .dbt h4{font-size:14px;font-weight:700;color:var(--text);}
+.dash-btn .dbt p{font-size:11px;color:var(--muted);margin-top:2px;}
+.dash-btn .dbgo{color:var(--muted);}
 
 @keyframes fadein{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
 .scroll>*{animation:fadein .35s ease both;}
@@ -247,19 +325,18 @@ body{
       <span>9:41</span>
       <span class="dots"><span>📶</span><span>🔋</span></span>
     </div>
-    <!-- SCREENS INJECTED BELOW -->
     <div id="screens"></div>
     <div class="toast" id="toast"></div>
   </div>
 </div>
 <script>
-/* ============ ICON LIBRARY (inline SVG, always visible) ============ */
+/* ============ ICONS ============ */
 const I = {
   loc:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>',
-  bell:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#14302b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>',
+  bell:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0d3040" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>',
   globe:'<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20M12 2a15 15 0 0 0 0 20"/></svg>',
-  hex:'<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#235c50" stroke-width="2" stroke-linejoin="round"><path d="M12 2l8.5 5v10L12 22l-8.5-5V7z"/></svg>',
-  clock:'<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#b07d09" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>',
+  hex:'<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 2l8.5 5v10L12 22l-8.5-5V7z"/></svg>',
+  clock:'<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#a07800" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>',
   headset:'<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#3266c9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14v-2a8 8 0 0 1 16 0v2"/><rect x="2" y="13" width="5" height="7" rx="2"/><rect x="17" y="13" width="5" height="7" rx="2"/><path d="M20 18v1a3 3 0 0 1-3 3h-3"/></svg>',
   headsetW:'<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14v-2a8 8 0 0 1 16 0v2"/><rect x="2" y="13" width="5" height="7" rx="2"/><rect x="17" y="13" width="5" height="7" rx="2"/><path d="M20 18v1a3 3 0 0 1-3 3h-3"/></svg>',
   home:c=>`<svg width="23" height="23" viewBox="0 0 24 24" fill="${c==1?'currentColor':'none'}" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5L12 3l9 7.5"/><path d="M5 9.5V20h14V9.5"/></svg>`,
@@ -270,13 +347,14 @@ const I = {
   chatSmall:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-8.5 8.5 9 9 0 0 1-3.8-.8L3 21l1.9-5.2A8.38 8.38 0 0 1 4 11.5 8.5 8.5 0 0 1 12.5 3 8.38 8.38 0 0 1 21 11.5z"/></svg>',
   search:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4-4"/></svg>',
   logout:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg>',
-  back:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#14302b" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>',
+  back:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0d3040" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>',
+  backW:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>',
   chevR:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>',
   chevD:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>',
   copy:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>',
-  check:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#235c50" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.5 2.5L16 9"/></svg>',
-  star:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#b07d09" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3 6.5 7 .9-5 4.9 1.2 7L12 18l-6.4 3.3L7 14.3 2 9.4l7-.9z"/></svg>',
-  shield:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#235c50" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 3v6c0 5-3.5 8.5-8 11-4.5-2.5-8-6-8-11V5z"/><path d="M9 12l2 2 4-4"/></svg>',
+  check:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#006877" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.5 2.5L16 9"/></svg>',
+  star:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#a07800" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3 6.5 7 .9-5 4.9 1.2 7L12 18l-6.4 3.3L7 14.3 2 9.4l7-.9z"/></svg>',
+  shield:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#006877" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 3v6c0 5-3.5 8.5-8 11-4.5-2.5-8-6-8-11V5z"/><path d="M9 12l2 2 4-4"/></svg>',
   view:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg>',
   download:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 11l5 5 5-5M4 21h16"/></svg>',
   calendar:'<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>',
@@ -293,9 +371,10 @@ const I = {
   doc:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>',
   img:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="M21 15l-5-5L5 21"/></svg>',
   rupee:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4h12M6 8h12M9 4c4 0 6 2 6 5s-2 5-6 5h-1l6 6"/></svg>',
+  grid:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>',
 };
 
-/* ============ SHARED PARTS ============ */
+/* ============ SHARED ============ */
 const footer = (active)=>`
 <div class="tabbar">
   <div class="tab ${active=='home'?'on':''}" onclick="go('home')">${I.home(active=='home'?1:0)}<span class="lbl">Home</span></div>
@@ -310,16 +389,74 @@ const head = (title,sub)=>`
   <div><h2>${title}</h2>${sub?`<div class="sub">${sub}</div>`:''}</div>
 </div>`;
 
-/* ============ SCREEN TEMPLATES ============ */
+const logoHtml = `<div class="logo">Onsite<b>go</b></div>`;
+const appbarRight = `<div class="appbar-right">
+  <div class="lang" onclick="toast('Language selection')">${I.globe} EN</div>
+  <div class="iconbtn" onclick="toast('Notifications')">${I.bell}<span class="dot"></span></div>
+</div>`;
+const backDashBtn = `<button class="back-dash-btn" onclick="showDashboard()">${I.backW.replace('#fff','currentColor')} Demo</button>`;
+
+/* ============ SCENARIO STATE ============ */
+let currentScenario = 'activeSR';
+
+/* ============ SCREENS ============ */
 const SCREENS = {};
 
+/* ---- DASHBOARD ---- */
+function showDashboard(){
+  const mount = document.getElementById('screens');
+  mount.innerHTML = `<div class="screen active"><div class="dashboard">
+    <div class="dash-header">
+      <div class="dash-logo">Onsite<b>go</b></div>
+      <div class="dash-tagline">App Prototype — Select a scenario to demo</div>
+    </div>
+    <div class="dash-label">Choose scenario</div>
+    <div class="dash-scenarios">
+      <div class="dash-btn" onclick="launchScenario('activeSR')">
+        <div class="dbi" style="background:#e1f4e9">🟢</div>
+        <div class="dbt"><h4>Active SR</h4><p>Homepage with live service requests in progress</p></div>
+        <div class="dbgo">${I.chevR}</div>
+      </div>
+      <div class="dash-btn" onclick="launchScenario('noSR')">
+        <div class="dbi" style="background:#e8f6f8">📋</div>
+        <div class="dbt"><h4>No SR</h4><p>Homepage with no active service requests</p></div>
+        <div class="dbgo">${I.chevR}</div>
+      </div>
+      <div class="dash-btn" onclick="launchScenario('inactiveSR')">
+        <div class="dbi" style="background:#fdecec">🔴</div>
+        <div class="dbt"><h4>Inactive / Closed SR</h4><p>Homepage showing closed SRs in red</p></div>
+        <div class="dbgo">${I.chevR}</div>
+      </div>
+      <div class="dash-btn" onclick="launchScenario('nps')">
+        <div class="dbi" style="background:#fff5cc">⭐</div>
+        <div class="dbt"><h4>NPS Feedback</h4><p>Homepage with NPS rating prompt for AC</p></div>
+        <div class="dbgo">${I.chevR}</div>
+      </div>
+      <div class="dash-btn" onclick="launchScenario('ccp')">
+        <div class="dbi" style="background:#d0eef2">✅</div>
+        <div class="dbt"><h4>SR Closure Feedback</h4><p>Homepage with post-service closure feedback for AC</p></div>
+        <div class="dbgo">${I.chevR}</div>
+      </div>
+    </div>
+  </div></div>`;
+}
+
+function launchScenario(scenario){
+  currentScenario = scenario;
+  go('home');
+}
+
 /* ---- HOME ---- */
-SCREENS.home = ()=>`
+SCREENS.home = ()=>{
+  const srSection = buildSRSection();
+  const npsRibbon = currentScenario==='nps' ? buildNPSRibbon() : '';
+  const ccpRibbon = currentScenario==='ccp' ? buildCCPRibbon() : '';
+  return `
 <div class="scroll">
   <div class="appbar">
-    <div class="logo"><span class="mark">${I.shield.replace('#235c50','#fff').replace('width="22" height="22"','width="16" height="16"')}</span>Onsitego</div>
+    ${logoHtml}
     <div class="appbar-right">
-      <div class="lang" onclick="toast('Language selection')">${I.globe} EN</div>
+      <button class="back-dash-btn" onclick="showDashboard()">${I.grid} Demo</button>
       <div class="iconbtn" onclick="toast('Notifications')">${I.bell}<span class="dot"></span></div>
     </div>
   </div>
@@ -331,31 +468,7 @@ SCREENS.home = ()=>`
     <div class="qa p3" onclick="goChat('Homepage → Support &amp; Query')"><div class="ic">${I.headset}</div><div class="lbl">Support &amp; Query</div></div>
   </div>
 
-  <div class="block">
-    <div class="sec-title">Track Service Requests <span class="count">3 Active</span></div>
-    <div class="rail">
-      <div class="srcard">
-        <div class="top"><h4>Air Conditioner</h4><span class="pill live"><span class="d"></span>LIVE</span></div>
-        <div class="srno">SR #260504-00001</div>
-        <div class="meta">Samsung Split AC · 1.5T</div>
-        <div class="row"><span class="stamp"><span class="d"></span>Technician Assigned</span><button class="btn sm" onclick="go('track-sr')">View ${I.chevR}</button></div>
-      </div>
-      <div class="srcard">
-        <div class="top"><h4>Washing Machine</h4><span class="pill blue"><span class="d"></span>LIVE</span></div>
-        <div class="srno">SR #260503-00018</div>
-        <div class="meta">LG Front Load · 7kg</div>
-        <div class="row"><span class="stamp"><span class="d"></span>Service Scheduled</span><button class="btn sm" onclick="go('track-sr')">View ${I.chevR}</button></div>
-      </div>
-      <div class="srcard">
-        <div class="top"><h4>Refrigerator</h4><span class="pill live"><span class="d"></span>LIVE</span></div>
-        <div class="srno">SR #260502-00007</div>
-        <div class="meta">Whirlpool · 265L</div>
-        <div class="row"><span class="stamp"><span class="d"></span>Part Ordered</span><button class="btn sm" onclick="go('track-sr')">View ${I.chevR}</button></div>
-      </div>
-    </div>
-    <div class="dots-ind"><i class="on"></i><i></i><i></i></div>
-    <div style="text-align:center;margin-top:6px;"><span class="viewall" onclick="go('service-request')" style="font-size:13px;font-weight:700;color:var(--teal-600);cursor:pointer;">View All Requests →</span></div>
-  </div>
+  ${srSection}
 
   <div class="block">
     <div class="sec-title">Why Customers Love Us</div>
@@ -381,7 +494,7 @@ SCREENS.home = ()=>`
       <div class="partner" style="color:#c0392b">Croma</div>
       <div class="partner" style="color:#c0392b">Vijay Sales</div>
       <div class="partner" style="color:#1f6fb2">Bajaj</div>
-      <div class="partner" style="color:#14302b">Kohinoor</div>
+      <div class="partner" style="color:#0d3040">Kohinoor</div>
       <div class="partner" style="color:#7d3c98">Sargam</div>
     </div>
   </div>
@@ -405,19 +518,108 @@ SCREENS.home = ()=>`
   </div>
 </div>
 ${fab('Homepage')}
-${footer('home')}`;
+${footer('home')}
+${npsRibbon}
+${ccpRibbon}`;
+};
+
+function buildSRSection(){
+  if(currentScenario==='noSR') return '';
+
+  if(currentScenario==='inactiveSR'){
+    return `<div class="block">
+    <div class="sec-title">Track Service Requests <span class="count">3 Closed</span></div>
+    <div class="rail">
+      <div class="srcard">
+        <div class="top"><h4>Air Conditioner</h4><span class="pill closed-pill"><span class="d"></span>CLOSED</span></div>
+        <div class="srno">SR #260504-00001</div>
+        <div class="meta">Samsung Split AC · 1.5T</div>
+        <div class="row"><span class="stamp" style="background:var(--red-bg);color:var(--red-text)"><span class="d"></span>Service Completed</span><button class="btn sm" onclick="go('track-sr')">View ${I.chevR}</button></div>
+      </div>
+      <div class="srcard">
+        <div class="top"><h4>Washing Machine</h4><span class="pill closed-pill"><span class="d"></span>CLOSED</span></div>
+        <div class="srno">SR #260503-00018</div>
+        <div class="meta">LG Front Load · 7kg</div>
+        <div class="row"><span class="stamp" style="background:var(--red-bg);color:var(--red-text)"><span class="d"></span>Resolved &amp; Closed</span><button class="btn sm" onclick="go('track-sr')">View ${I.chevR}</button></div>
+      </div>
+      <div class="srcard">
+        <div class="top"><h4>Refrigerator</h4><span class="pill closed-pill"><span class="d"></span>CLOSED</span></div>
+        <div class="srno">SR #260502-00007</div>
+        <div class="meta">Whirlpool · 265L</div>
+        <div class="row"><span class="stamp" style="background:var(--red-bg);color:var(--red-text)"><span class="d"></span>Resolved &amp; Closed</span><button class="btn sm" onclick="go('track-sr')">View ${I.chevR}</button></div>
+      </div>
+    </div>
+    <div class="dots-ind"><i class="on"></i><i></i><i></i></div>
+    <div style="text-align:center;margin-top:6px;"><span class="viewall" onclick="go('service-request')" style="font-size:13px;color:var(--primary-light);cursor:pointer;">View All Requests →</span></div>
+  </div>`;
+  }
+
+  // activeSR, nps, ccp — show active SR section
+  return `<div class="block">
+    <div class="sec-title">Track Service Requests <span class="count">3 Active</span></div>
+    <div class="rail">
+      <div class="srcard">
+        <div class="top"><h4>Air Conditioner</h4><span class="pill live"><span class="d"></span>LIVE</span></div>
+        <div class="srno">SR #260504-00001</div>
+        <div class="meta">Samsung Split AC · 1.5T</div>
+        <div class="row"><span class="stamp"><span class="d"></span>Technician Assigned</span><button class="btn sm" onclick="go('track-sr')">View ${I.chevR}</button></div>
+      </div>
+      <div class="srcard">
+        <div class="top"><h4>Washing Machine</h4><span class="pill blue"><span class="d"></span>LIVE</span></div>
+        <div class="srno">SR #260503-00018</div>
+        <div class="meta">LG Front Load · 7kg</div>
+        <div class="row"><span class="stamp"><span class="d"></span>Service Scheduled</span><button class="btn sm" onclick="go('track-sr')">View ${I.chevR}</button></div>
+      </div>
+      <div class="srcard">
+        <div class="top"><h4>Refrigerator</h4><span class="pill live"><span class="d"></span>LIVE</span></div>
+        <div class="srno">SR #260502-00007</div>
+        <div class="meta">Whirlpool · 265L</div>
+        <div class="row"><span class="stamp"><span class="d"></span>Part Ordered</span><button class="btn sm" onclick="go('track-sr')">View ${I.chevR}</button></div>
+      </div>
+    </div>
+    <div class="dots-ind"><i class="on"></i><i></i><i></i></div>
+    <div style="text-align:center;margin-top:6px;"><span class="viewall" onclick="go('service-request')" style="font-size:13px;color:var(--primary-light);cursor:pointer;">View All Requests →</span></div>
+  </div>`;
+}
+
+function buildNPSRibbon(){
+  return `<div class="nps-ribbon" id="nps-ribbon">
+    <span class="rib-text">How did you like the service for Air Conditioner?</span>
+    <button class="rib-cta" onclick="npsOK()">OK</button>
+    <button class="rib-dismiss" onclick="document.getElementById('nps-ribbon').remove()">×</button>
+  </div>`;
+}
+
+function buildCCPRibbon(){
+  return `<div class="ccp-ribbon" id="ccp-ribbon">
+    <span class="rib-text">Service is completed for Air Conditioner.</span>
+    <button class="rib-cta" onclick="ccpConfirm()">Confirm</button>
+    <button class="rib-dismiss" onclick="document.getElementById('ccp-ribbon').remove()">×</button>
+  </div>`;
+}
+
+function npsOK(){
+  document.getElementById('nps-ribbon').remove();
+  toast('Thanks for your feedback! 🙏');
+}
+function ccpConfirm(){
+  document.getElementById('ccp-ribbon').remove();
+  toast('Service closure confirmed ✓');
+}
 
 /* ---- TRACK SR ---- */
 SCREENS['track-sr'] = ()=>`
-<div class="scroll">
+<div class="scroll" style="padding-bottom:60px">
   ${head('SR Status','Air Conditioner')}
   <div class="card">
-    <div class="top" style="display:flex;justify-content:space-between;align-items:flex-start">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start">
       <div>
-        <div style="display:flex;align-items:center;gap:8px"><h3 style="font-size:16px;font-weight:800">SR #260504-00001</h3><span class="miniic" style="width:28px;height:28px" onclick="toast('SR number copied')">${I.copy}</span></div>
-        <div style="font-size:13px;color:var(--muted);font-weight:600;margin-top:6px">Air Conditioner · Samsung</div>
+        <div style="display:flex;align-items:center;gap:8px"><h3 style="font-size:16px;font-weight:700">SR #260504-00001</h3><span class="miniic" style="width:28px;height:28px" onclick="toast('SR number copied')">${I.copy}</span></div>
+        <div style="font-size:13px;color:var(--muted);margin-top:6px">Air Conditioner · Samsung</div>
       </div>
-      <span class="pill live"><span class="d"></span>LIVE</span>
+      ${currentScenario==='inactiveSR'
+        ? '<span class="pill closed-pill"><span class="d"></span>CLOSED</span>'
+        : '<span class="pill live"><span class="d"></span>LIVE</span>'}
     </div>
     <div class="capsule">${I.calendar} Engineer Visit · 04 Jun 2026</div>
   </div>
@@ -429,39 +631,69 @@ SCREENS['track-sr'] = ()=>`
       <div class="tl">
         <div class="item done"><div class="marker"><div class="mk"></div><div class="line"></div></div><div class="tx"><div class="t">Request Raised</div><div class="d">Your service request was created.</div></div></div>
         <div class="item done"><div class="marker"><div class="mk"></div><div class="line"></div></div><div class="tx"><div class="t">Technician Assigned</div><div class="d">A certified engineer is assigned to you.</div></div></div>
-        <div class="item now"><div class="marker"><div class="mk"></div><div class="line"></div></div><div class="tx"><div class="t">Visit Scheduled</div><div class="d">Engineer will visit on 04 Jun 2026.</div></div></div>
-        <div class="item"><div class="marker"><div class="mk"></div><div class="line"></div></div><div class="tx"><div class="t">Repair In Progress</div><div class="d">Diagnosis &amp; repair of your appliance.</div></div></div>
-        <div class="item"><div class="marker"><div class="mk"></div></div><div class="tx"><div class="t">Resolved</div><div class="d">Service request closed successfully.</div></div></div>
+        <div class="item ${currentScenario==='inactiveSR'?'done':'now'}"><div class="marker"><div class="mk"></div><div class="line"></div></div><div class="tx"><div class="t">Visit Scheduled</div><div class="d">Engineer visited on 04 Jun 2026.</div></div></div>
+        <div class="item ${currentScenario==='inactiveSR'?'done':''}"><div class="marker"><div class="mk"></div><div class="line"></div></div><div class="tx"><div class="t">Repair In Progress</div><div class="d">Diagnosis &amp; repair of your appliance.</div></div></div>
+        <div class="item ${currentScenario==='inactiveSR'?'done':''}"><div class="marker"><div class="mk"></div></div><div class="tx"><div class="t">Resolved</div><div class="d">Service request closed successfully.</div></div></div>
       </div>
     </div>
   </div>
 
-  <div class="card" id="docs">
+  <div class="card collapsed" id="docs">
     <div class="card-h" onclick="toggle('docs')"><h3>Documents &amp; Images</h3><span class="chev">${I.chevD}</span></div>
     <div class="card-body">
       <div class="docrow"><div class="ic">${I.doc}</div><div class="info"><div class="t">Jobsheet — Visit 1</div><div class="s">PDF · 04 Jun 2026</div></div><div class="acts"><span class="miniic" onclick="toast('Opening jobsheet')">${I.view}</span><span class="miniic" onclick="toast('Downloading')">${I.download}</span></div></div>
       <div class="docrow"><div class="ic">${I.img}</div><div class="info"><div class="t">Service Images</div><div class="s">Tap to verify these are correct</div></div><div class="acts"><span class="miniic" onclick="toast('Images confirmed ✓')">${I.check}</span><span class="miniic" onclick="toast('Reported — task created for CCO')">${I.escalate}</span></div></div>
-      <div class="docrow"><div class="ic">${I.img}</div><div class="info"><div class="t">Troubleshooting Images</div><div class="s">Uploaded by you · 2 files</div></div><div class="acts"><span class="miniic" onclick="toast('Opening images')">${I.view}</span></div></div>
       <div class="docrow"><div class="ic">${I.rupee}</div><div class="info"><div class="t">Invoice</div><div class="s">Payment receipt</div></div><div class="acts"><span class="miniic" onclick="toast('Opening invoice')">${I.view}</span></div></div>
       <div class="docrow"><div class="ic">${I.doc}</div><div class="info"><div class="t">Terms &amp; Conditions</div><div class="s">Plan TnC</div></div><div class="acts"><span class="miniic" onclick="toast('Opening TnC')">${I.view}</span></div></div>
-      <div class="docrow"><div class="ic">${I.doc}</div><div class="info"><div class="t">Certificate of Purchase</div><div class="s">COP</div></div><div class="acts"><span class="miniic" onclick="toast('Downloading COP')">${I.download}</span></div></div>
     </div>
   </div>
-
-  <div class="card">
-    <h3 style="margin-bottom:6px">Need help with this SR?</h3>
-    <div class="helpgrid">
-      <div class="helpbtn" onclick="toast('Reschedule flow')"><span class="ic">${I.reschedule}</span>Reschedule</div>
-      <div class="helpbtn" onclick="goChat('Track SR → Escalate')"><span class="ic">${I.escalate}</span>Escalate</div>
-      <div class="helpbtn" onclick="goChat('Track SR → Query')"><span class="ic">${I.query}</span>Query</div>
-      <div class="helpbtn" onclick="toast('Cancel SR flow')"><span class="ic">${I.cancel}</span>Cancel SR</div>
-    </div>
-    <button class="btn ghost full" style="margin-top:10px" onclick="go('plan-detail')">${I.plan}&nbsp; Plan Details</button>
-  </div>
+</div>
+<div class="sr-help-bar" onclick="showSRHelpSheet()">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 0 1 4.5 1.5c0 1.5-2 2-2 3.5M12 17h.01"/></svg>
+  <span>Need help with this SR?</span>
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
 </div>
 ${fab('Track SR Page')}`;
 
-/* ---- PLANS (listing) ---- */
+function showSRHelpSheet(){
+  const screen = document.querySelector('#screens .screen.active');
+  const sheet = document.createElement('div');
+  sheet.className='sheet-overlay';
+  sheet.id='sr-help-sheet';
+  sheet.innerHTML=`
+  <div class="sheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-title">Need help with this SR?</div>
+    <div class="sheet-item" onclick="closeSheet();goChat('Track SR → Escalate')">
+      <div class="si-ic" style="background:var(--red-bg);color:var(--red-text)">${I.escalate}</div>
+      <div class="si-tx"><h4>Escalate</h4><p>Raise a concern about this service request</p></div>
+      ${I.chevR}
+    </div>
+    <div class="sheet-item" onclick="closeSheet();goChat('Track SR → Query')">
+      <div class="si-ic" style="background:var(--primary-pale);color:var(--primary)">${I.query}</div>
+      <div class="si-tx"><h4>Query</h4><p>Ask a question about this SR</p></div>
+      ${I.chevR}
+    </div>
+    <div class="sheet-item" onclick="closeSheet();toast('Cancel SR flow started')">
+      <div class="si-ic" style="background:#fdecec;color:var(--red-text)">${I.cancel}</div>
+      <div class="si-tx"><h4>Cancel SR</h4><p>Request cancellation of this service request</p></div>
+      ${I.chevR}
+    </div>
+    <div class="sheet-item" onclick="closeSheet();go('plan-detail')">
+      <div class="si-ic" style="background:var(--secondary-soft);color:var(--secondary-text)">${I.plan}</div>
+      <div class="si-tx"><h4>Plan Details</h4><p>View your plan coverage and documents</p></div>
+      ${I.chevR}
+    </div>
+  </div>`;
+  sheet.addEventListener('click', e=>{ if(e.target===sheet) closeSheet(); });
+  screen.appendChild(sheet);
+}
+function closeSheet(){
+  const s=document.getElementById('sr-help-sheet');
+  if(s) s.remove();
+}
+
+/* ---- PLANS ---- */
 SCREENS.plans = ()=>`
 <div class="scroll">
   ${head('My Plans')}
@@ -469,7 +701,6 @@ SCREENS.plans = ()=>`
     <div class="t on" onclick="switchTab(this,'pl-active')">Active</div>
     <div class="t" onclick="switchTab(this,'pl-inactive')">Inactive</div>
   </div>
-
   <div class="tabpane on" id="pl-active">
     <div class="plancard">
       <div class="ph"><div class="pic">${I.ac}</div><div class="pt"><h4>AC Protect Plus</h4><div class="c">Air Conditioner · Samsung</div></div><span class="pill live"><span class="d"></span>Live</span></div>
@@ -486,36 +717,23 @@ SCREENS.plans = ()=>`
         <button class="btn ghost full" onclick="go('plan-detail')">View Details</button>
       </div>
     </div>
-
     <div class="plancard">
       <div class="ph"><div class="pic">${I.wash}</div><div class="pt"><h4>Appliance Care</h4><div class="c">Washing Machine · LG</div></div><span class="pill live"><span class="d"></span>Live</span></div>
       <div class="daterow"><div class="dd"><div class="l">Start</div><div class="v">02 Mar 2026</div></div><div class="dd"><div class="l">End</div><div class="v">01 Mar 2027</div></div></div>
       <div class="warn">${I.escalate} Copayment applicable on each SR</div>
-      <div class="coverage collapsed" id="cov2">
-        <div class="card-h" onclick="toggleCov('cov2')"><h3 style="font-size:14px">Coverage</h3><span class="chev">${I.chevD}</span></div>
-        <ul><li>${I.check} Drum &amp; motor repair</li><li>${I.check} Water inlet &amp; drainage faults</li></ul>
-        <span class="knowmore" onclick="go('plan-detail')">Know more →</span>
-      </div>
       <div class="ctarow">
         <button class="btn full" onclick="goChat('My Plans → Active → Raise SR')">Raise SR</button>
         <button class="btn ghost full" onclick="go('plan-detail')">View Details</button>
       </div>
     </div>
-
     <div class="helpbanner" onclick="goChat('My Plans → Active → Need Help')">
       <div class="ic">${I.headset}</div><div class="tx"><h4>Need help with a plan?</h4><p>Chat with our support assistant</p></div>${I.chevR}
     </div>
   </div>
-
   <div class="tabpane" id="pl-inactive">
     <div class="plancard" style="opacity:.85">
       <div class="ph"><div class="pic" style="background:#eee">${I.tv}</div><div class="pt"><h4>TV Extended Warranty</h4><div class="c">Television · Sony</div></div><span class="pill" style="background:#eee;color:#888"><span class="d" style="background:#888"></span>Expired</span></div>
       <div class="daterow"><div class="dd"><div class="l">Start</div><div class="v">05 Jun 2024</div></div><div class="dd"><div class="l">End</div><div class="v">04 Jun 2025</div></div></div>
-      <div class="coverage collapsed" id="cov3">
-        <div class="card-h" onclick="toggleCov('cov3')"><h3 style="font-size:14px">Coverage</h3><span class="chev">${I.chevD}</span></div>
-        <ul><li>${I.check} Panel &amp; backlight repair</li><li>${I.check} Power board faults</li></ul>
-        <span class="knowmore" onclick="go('plan-detail')">Know more →</span>
-      </div>
       <div class="ctarow"><button class="btn ghost full" onclick="go('plan-detail')">View Details</button></div>
     </div>
     <div class="helpbanner" onclick="goChat('My Plans → Inactive → Need Help')">
@@ -532,45 +750,35 @@ SCREENS['plan-detail'] = ()=>`
   ${head('Plan Details')}
   <div class="card">
     <div style="display:flex;gap:13px;align-items:flex-start">
-      <div class="pic" style="width:50px;height:50px;border-radius:14px;background:var(--teal-100);display:flex;align-items:center;justify-content:center;color:var(--teal-700)">${I.ac}</div>
-      <div style="flex:1"><h3 style="font-size:17px">AC Protect Plus</h3><div style="font-size:12.5px;color:var(--muted);font-weight:600;margin-top:3px">Air Conditioner · Samsung</div></div>
+      <div style="width:50px;height:50px;border-radius:14px;background:var(--primary-tint);display:flex;align-items:center;justify-content:center;color:var(--primary)">${I.ac}</div>
+      <div style="flex:1"><h3 style="font-size:17px">AC Protect Plus</h3><div style="font-size:12px;color:var(--muted);margin-top:3px">Air Conditioner · Samsung</div></div>
       <span class="pill live"><span class="d"></span>Live</span>
     </div>
     <div class="daterow"><div class="dd"><div class="l">Start</div><div class="v">12 Jan 2026</div></div><div class="dd"><div class="l">End</div><div class="v">11 Jan 2028</div></div></div>
     <div class="kv" style="margin-top:10px"><span class="k">OSID</span><span class="v">OS-PLAN-2026-7741</span></div>
     <div class="warn">${I.escalate} Copayment of ₹299 applicable on each SR</div>
   </div>
-
   <div class="card">
     <h3 style="margin-bottom:8px">Plan Information</h3>
     <div class="kv"><span class="k">Plan Type</span><span class="v">Extended Warranty</span></div>
     <div class="kv"><span class="k">PM Visits</span><span class="v">1 of 3 used</span></div>
     <div class="kv"><span class="k">Purchase Date</span><span class="v">12 Jan 2026</span></div>
   </div>
-
   <div class="card">
     <h3 style="margin-bottom:8px">Coverage Details</h3>
-    <div style="font-size:12px;font-weight:800;color:var(--live-text);margin:6px 0 4px">WHAT'S COVERED</div>
-    <ul style="list-style:none"><li style="font-size:12.5px;font-weight:600;padding:4px 0;display:flex;gap:8px">${I.check} Compressor &amp; gas refill</li><li style="font-size:12.5px;font-weight:600;padding:4px 0;display:flex;gap:8px">${I.check} PCB &amp; electrical repair</li><li style="font-size:12.5px;font-weight:600;padding:4px 0;display:flex;gap:8px">${I.check} Preventive maintenance</li></ul>
-    <div style="font-size:12px;font-weight:800;color:var(--red-text);margin:12px 0 4px">NOT COVERED</div>
-    <ul style="list-style:none"><li style="font-size:12.5px;font-weight:600;padding:4px 0;display:flex;gap:8px;color:var(--muted)">${I.cancel} Physical / liquid damage</li><li style="font-size:12.5px;font-weight:600;padding:4px 0;display:flex;gap:8px;color:var(--muted)">${I.cancel} Cosmetic wear &amp; tear</li></ul>
+    <div style="font-size:12px;font-weight:700;color:var(--live-text);margin:6px 0 4px">COVERED</div>
+    <ul style="list-style:none"><li style="font-size:12px;padding:4px 0;display:flex;gap:8px">${I.check} Compressor &amp; gas refill</li><li style="font-size:12px;padding:4px 0;display:flex;gap:8px">${I.check} PCB &amp; electrical repair</li><li style="font-size:12px;padding:4px 0;display:flex;gap:8px">${I.check} Preventive maintenance</li></ul>
+    <div style="font-size:12px;font-weight:700;color:var(--red-text);margin:12px 0 4px">NOT COVERED</div>
+    <ul style="list-style:none"><li style="font-size:12px;padding:4px 0;display:flex;gap:8px;color:var(--muted)">${I.cancel} Physical / liquid damage</li><li style="font-size:12px;padding:4px 0;display:flex;gap:8px;color:var(--muted)">${I.cancel} Cosmetic wear &amp; tear</li></ul>
   </div>
-
-  <div class="card">
-    <h3 style="margin-bottom:6px">Documents</h3>
-    <div class="docrow"><div class="ic">${I.doc}</div><div class="info"><div class="t">Terms &amp; Conditions</div><div class="s">Plan TnC document</div></div><div class="acts"><span class="miniic" onclick="toast('Opening TnC')">${I.view}</span></div></div>
-    <div class="docrow"><div class="ic">${I.doc}</div><div class="info"><div class="t">Certificate of Purchase</div><div class="s">COP</div></div><div class="acts"><span class="miniic" onclick="toast('Downloading COP')">${I.download}</span></div></div>
-  </div>
-
   <div class="card">
     <h3 style="margin-bottom:6px">Service Requests</h3>
     <div class="docrow" onclick="go('track-sr')" style="cursor:pointer"><div class="ic">${I.ac}</div><div class="info"><div class="t">SR #260504-00001 <span class="pill live" style="font-size:9px;padding:2px 7px"><span class="d"></span>Live</span></div><div class="s">Created 02 Jun · ongoing</div></div>${I.chevR}</div>
     <div class="docrow" onclick="go('track-sr')" style="cursor:pointer"><div class="ic">${I.ac}</div><div class="info"><div class="t">SR #260314-00042 <span class="pill" style="font-size:9px;padding:2px 7px;background:#eee;color:#888">Closed</span></div><div class="s">Created 14 Mar · Closed 16 Mar</div></div>${I.chevR}</div>
   </div>
-
   <div class="card">
-    <button class="btn full" onclick="goChat('Plan Detail → Raise New SR')">${I.clock.replace('#b07d09','#fff').replace('width=\"26\" height=\"26\"','width=\"18\" height=\"18\"')}&nbsp; Raise New SR</button>
-    <button class="btn ghost full" style="margin-top:10px" onclick="goChat('Plan Detail → Support &amp; Query')">${I.headset}&nbsp; Help / Support</button>
+    <button class="btn full" onclick="goChat('Plan Detail → Raise New SR')">${I.clock.replace('#a07800','#fff').replace('width="26" height="26"','width="18" height="18"')}&nbsp; Raise New SR</button>
+    <button class="btn ghost full" style="margin-top:10px" onclick="goChat('Plan Detail → Support &amp; Query')">${I.headset.replace('#3266c9','var(--primary)').replace('width="26" height="26"','width="18" height="18"')}&nbsp; Help / Support</button>
   </div>
 </div>
 ${fab('Plan Detail Page')}`;
@@ -579,47 +787,29 @@ ${fab('Plan Detail Page')}`;
 SCREENS['service-request'] = ()=>`
 <div class="scroll">
   ${head('Service Requests')}
-  <div class="search">${I.search}<input placeholder="Search by SR number or category" oninput="toast('Searching across all SRs')"></div>
+  <div class="search">${I.search}<input placeholder="Search by SR number or category" oninput="toast('Searching…')"></div>
   <div class="tabs">
     <div class="t on" onclick="switchTab(this,'sr-active')">Active</div>
     <div class="t" onclick="switchTab(this,'sr-inactive')">Inactive</div>
   </div>
-
   <div class="tabpane on" id="sr-active">
     <div class="card">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start"><div style="display:flex;gap:11px;align-items:center"><div class="pic" style="width:42px;height:42px;border-radius:12px;background:var(--teal-100);display:flex;align-items:center;justify-content:center;color:var(--teal-700)">${I.ac}</div><div><h3 style="font-size:15px">Air Conditioner</h3><div style="font-size:12px;color:var(--muted);font-weight:600">SR #260504-00001</div></div></div><span class="pill live"><span class="d"></span>Live</span></div>
+      <div style="display:flex;justify-content:space-between;align-items:flex-start"><div style="display:flex;gap:11px;align-items:center"><div style="width:42px;height:42px;border-radius:12px;background:var(--primary-tint);display:flex;align-items:center;justify-content:center;color:var(--primary)">${I.ac}</div><div><h3 style="font-size:15px">Air Conditioner</h3><div style="font-size:12px;color:var(--muted)">SR #260504-00001</div></div></div><span class="pill live"><span class="d"></span>Live</span></div>
       <div class="kv" style="margin-top:12px"><span class="k">Created On</span><span class="v">02 Jun 2026</span></div>
       <div class="kv"><span class="k">Visit Date</span><span class="v">04 Jun 2026</span></div>
       <div class="kv"><span class="k">Status</span><span class="v">Technician Assigned</span></div>
-      <div class="kv"><span class="k">Est. Resolution</span><span class="v">06 Jun 2026</span></div>
       <div class="copay">${I.rupee}&nbsp; Copayment of ₹299 pending <button class="btn yellow sm" onclick="toast('Opening payment')">Pay Now</button></div>
       <button class="btn full" style="margin-top:12px" onclick="go('track-sr')">Track SR</button>
     </div>
-
-    <div class="card">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start"><div style="display:flex;gap:11px;align-items:center"><div class="pic" style="width:42px;height:42px;border-radius:12px;background:var(--teal-100);display:flex;align-items:center;justify-content:center;color:var(--teal-700)">${I.fridge}</div><div><h3 style="font-size:15px">Refrigerator</h3><div style="font-size:12px;color:var(--muted);font-weight:600">SR #260502-00007</div></div></div><span class="pill live"><span class="d"></span>Live</span></div>
-      <div class="kv" style="margin-top:12px"><span class="k">Created On</span><span class="v">28 May 2026</span></div>
-      <div class="kv"><span class="k">Status</span><span class="v">Closure Confirmation Pending</span></div>
-      <div style="display:flex;gap:10px;margin-top:12px"><button class="btn ghost full" onclick="go('track-sr')">Track SR</button><button class="btn full" onclick="toast('Closure confirmation pop-up')">Confirm Closure</button></div>
-    </div>
-
     <div class="card" style="text-align:center;border-style:dashed">
-      <button class="btn full" onclick="goChat('Service Request → Raise SR')">${I.clock.replace('#b07d09','#fff').replace('width=\"26\" height=\"26\"','width=\"18\" height=\"18\"')}&nbsp; Raise a New Service Request</button>
+      <button class="btn full" onclick="goChat('Service Request → Raise SR')">${I.clock.replace('#a07800','#fff').replace('width="26" height="26"','width="18" height="18"')}&nbsp; Raise a New Service Request</button>
     </div>
   </div>
-
   <div class="tabpane" id="sr-inactive">
     <div class="card" style="opacity:.92">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start"><div style="display:flex;gap:11px;align-items:center"><div class="pic" style="width:42px;height:42px;border-radius:12px;background:#eee;display:flex;align-items:center;justify-content:center;color:#777">${I.wash}</div><div><h3 style="font-size:15px">Washing Machine</h3><div style="font-size:12px;color:var(--muted);font-weight:600">SR #260410-00031</div></div></div><span class="pill" style="background:#eee;color:#888"><span class="d" style="background:#888"></span>Closed</span></div>
+      <div style="display:flex;justify-content:space-between;align-items:flex-start"><div style="display:flex;gap:11px;align-items:center"><div style="width:42px;height:42px;border-radius:12px;background:#eee;display:flex;align-items:center;justify-content:center;color:#777">${I.wash}</div><div><h3 style="font-size:15px">Washing Machine</h3><div style="font-size:12px;color:var(--muted)">SR #260410-00031</div></div></div><span class="pill" style="background:#eee;color:#888"><span class="d" style="background:#888"></span>Closed</span></div>
       <div class="kv" style="margin-top:12px"><span class="k">Created On</span><span class="v">10 Apr 2026</span></div>
       <div class="kv"><span class="k">Closed On</span><span class="v">13 Apr 2026</span></div>
-      <div class="kv"><span class="k">Status</span><span class="v">Resolved &amp; Closed</span></div>
-      <div style="display:flex;gap:10px;margin-top:12px"><button class="btn ghost full" onclick="go('track-sr')">View Detail</button><button class="btn full" onclick="goChat('Service Request → Inactive → Reopen')">Raise Again</button></div>
-    </div>
-    <div class="card" style="opacity:.92">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start"><div style="display:flex;gap:11px;align-items:center"><div class="pic" style="width:42px;height:42px;border-radius:12px;background:#eee;display:flex;align-items:center;justify-content:center;color:#777">${I.tv}</div><div><h3 style="font-size:15px">Television</h3><div style="font-size:12px;color:var(--muted);font-weight:600">SR #251218-00093</div></div></div><span class="pill" style="background:#eee;color:#888"><span class="d" style="background:#888"></span>Closed</span></div>
-      <div class="kv" style="margin-top:12px"><span class="k">Created On</span><span class="v">18 Dec 2025</span></div>
-      <div class="kv"><span class="k">Closed On</span><span class="v">20 Dec 2025</span></div>
       <div style="display:flex;gap:10px;margin-top:12px"><button class="btn ghost full" onclick="go('track-sr')">View Detail</button><button class="btn full" onclick="goChat('Service Request → Inactive → Reopen')">Raise Again</button></div>
     </div>
   </div>
@@ -635,7 +825,7 @@ SCREENS.profile = ()=>`
   <div class="menu">
     <div class="mi" onclick="go('plans')"><div class="ic">${I.hexnav}</div><div class="t">My Plans</div><span class="ar">${I.chevR}</span></div>
     <div class="mi" onclick="go('service-request')"><div class="ic">${I.file}</div><div class="t">My Service Requests</div><span class="ar">${I.chevR}</span></div>
-    <div class="mi" onclick="goChat('Profile → Support')"><div class="ic">${I.headset}</div><div class="t">Help &amp; Support</div><span class="ar">${I.chevR}</span></div>
+    <div class="mi" onclick="goChat('Profile → Support')"><div class="ic">${I.headset.replace('#3266c9','var(--primary)').replace('width="26" height="26"','width="20" height="20"')}</div><div class="t">Help &amp; Support</div><span class="ar">${I.chevR}</span></div>
     <div class="mi" onclick="toast('Language settings')"><div class="ic">${I.globe}</div><div class="t">Language</div><span class="ar">${I.chevR}</span></div>
     <div class="mi" onclick="toast('Manage addresses')"><div class="ic">${I.loc}</div><div class="t">Saved Addresses</div><span class="ar">${I.chevR}</span></div>
   </div>
@@ -648,7 +838,7 @@ ${footer('profile')}`;
 
 /* ---- CHATBOT ---- */
 SCREENS.chatbot = (source)=>`
-<div class="screen-inner" style="display:flex;flex-direction:column;height:100%;background:var(--teal-50)">
+<div class="screen-inner" style="display:flex;flex-direction:column;height:100%;background:var(--primary-pale)">
   <div class="chathead">
     <div class="back" onclick="go('home')">${I.back}</div>
     <div class="av">${I.headsetW}</div>
@@ -656,27 +846,19 @@ SCREENS.chatbot = (source)=>`
   </div>
   <div class="chatbody">
     <div class="entrytag">Entered from: ${source||'Floating icon'}</div>
-    <div class="bubble bot">Hi Anurag 👋 I'm your Onsitego assistant. I can help you raise a request, track service, or answer plan queries.</div>
-    <div class="bubble bot">How can I help you today?</div>
   </div>
-  <div class="quickreplies">
-    <div class="qr" onclick="botReply('Raise a new SR')">Raise a new SR</div>
-    <div class="qr" onclick="botReply('Track my service')">Track my service</div>
-    <div class="qr" onclick="botReply('Plan query')">Plan query</div>
-    <div class="qr" onclick="botReply('Give feedback')">Give feedback</div>
-  </div>
+  <div class="quickreplies"></div>
   <div class="chatinput">
-    <input id="chatfield" placeholder="Type your message…" onkeydown="if(event.key=='Enter')sendChat()">
+    <input id="chatfield" placeholder="Type your message…" onkeydown="if(event.key==='Enter')sendChat()">
     <div class="send" onclick="sendChat()">${I.send}</div>
   </div>
 </div>`;
 
-/* ============ NAVIGATION ENGINE ============ */
+/* ============ NAV ============ */
 const mount = document.getElementById('screens');
 function render(html){ mount.innerHTML = `<div class="screen active">${html}</div>`; mount.firstChild.scrollTop=0; }
 function go(id){ render(SCREENS[id]()); }
-function goChat(source){ render(SCREENS.chatbot(source)); }
-
+function goChat(source){ render(SCREENS.chatbot(source)); chatBoot(source); }
 function toggle(id){ document.getElementById(id).classList.toggle('collapsed'); }
 function toggleCov(id){ document.getElementById(id).classList.toggle('collapsed'); }
 function switchTab(el,pane){
@@ -691,22 +873,339 @@ function toast(msg){
   const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show');
   clearTimeout(toastT); toastT=setTimeout(()=>t.classList.remove('show'),1800);
 }
-function botReply(txt){
-  const body=document.querySelector('.chatbody');
-  body.insertAdjacentHTML('beforeend',`<div class="bubble user">${txt}</div>`);
-  body.scrollTop=body.scrollHeight;
-  setTimeout(()=>{
-    body.insertAdjacentHTML('beforeend',`<div class="bubble bot">Sure! Let me help you with "${txt}". One moment while I pull that up…</div>`);
-    body.scrollTop=body.scrollHeight;
-  },500);
+
+/* ============ CHATBOT ENGINE ============ */
+const CATS = {
+  AC:{label:'Air Conditioner',plans:[
+    {name:'AMC',brand:'Samsung',start:'12 Jan 2026',end:'11 Jan 2027',lastSR:'14 Mar 2026',openSR:null,copay:299},
+    {name:'AC Annual Plan',brand:'Samsung',start:'12 Jan 2026',end:'11 Jan 2028',lastSR:'No SR yet',openSR:null,copay:299}
+  ],issues:['Need Service','Not Cooling','Strange Noise','Not Working']},
+  WM:{label:'Washing Machine',plans:[
+    {name:'Appliance Care',brand:'LG',start:'02 Mar 2026',end:'01 Mar 2027',lastSR:'No SR yet',openSR:null,copay:299}
+  ],issues:['Not Draining','Not Spinning','Strange Noise','Not Working']},
+  REF:{label:'Refrigerator',plans:[
+    {name:'Cooling Secure',brand:'Whirlpool',start:'20 Feb 2026',end:'19 Feb 2028',lastSR:'No SR yet',openSR:null,copay:0}
+  ],issues:['Not Cooling','Water Leakage','Strange Noise','Not Working']},
+  TV:{label:'Television',plans:[
+    {name:'TV Protect',brand:'Sony',start:'05 Jan 2026',end:'04 Jan 2028',lastSR:'18 May 2026',openSR:'260518-00045',copay:0}
+  ],issues:['No Display','No Power','Strange Noise','Not Working']}
+};
+const CATICON={AC:I.ac,WM:I.wash,REF:I.fridge,TV:I.tv};
+const PRESET_ADDR='Flat 1203, Palm Grove Society<br>Powai, Mumbai – 400076';
+let SR={},chatStage=null,supportTopic=null;
+
+function cbBody(){return document.querySelector('.chatbody');}
+function cbOpts(){return document.querySelector('.quickreplies');}
+function scrollDown(){const b=cbBody();if(b)b.scrollTop=b.scrollHeight;}
+function bot(html){cbBody().insertAdjacentHTML('beforeend',`<div class="bubble bot">${html}</div>`);scrollDown();}
+function usr(txt){cbBody().insertAdjacentHTML('beforeend',`<div class="bubble user">${txt}</div>`);scrollDown();}
+function botCard(html){cbBody().insertAdjacentHTML('beforeend',`<div class="botcard">${html}</div>`);scrollDown();}
+function botEl(html){cbBody().insertAdjacentHTML('beforeend',html);scrollDown();}
+function clearOpts(){const o=cbOpts();if(o)o.innerHTML='';}
+function opts(list){
+  const o=cbOpts();o.innerHTML=list.map((x,i)=>`<div class="qr" data-i="${i}">${x.label}</div>`).join('');
+  [...o.children].forEach((el,i)=>el.onclick=()=>{if(list[i].echo!==false)usr(list[i].label);clearOpts();list[i].fn();});
 }
-function sendChat(){
-  const f=document.getElementById('chatfield'); if(!f.value.trim())return;
-  botReply(f.value.trim()); f.value='';
+function typing(cb,delay=650){
+  cbBody().insertAdjacentHTML('beforeend',`<div class="bubble bot typing" id="typing">typing…</div>`);scrollDown();
+  setTimeout(()=>{const t=document.getElementById('typing');if(t)t.remove();cb();},delay);
+}
+function chatBoot(source){
+  chatStage=null;SR={source};
+  if(/raise sr|raise new sr|raise a new|reopen/i.test(source))startSRFlow(source);
+  else if(/customer feedback/i.test(source)) feedbackBoot();
+  else genericBoot();
 }
 
-/* boot */
-go('home');
+/* ---- FEEDBACK FLOW ---- */
+function feedbackBoot(){
+  bot("Hi Anurag 👋 We value your opinion!");
+  typing(()=>{
+    bot('What would you like to share feedback about?');
+    opts([
+      {label:'⭐ Recent Service Request', fn:()=>feedbackSRRating()},
+      {label:'🛒 Plan Purchase Experience', fn:()=>feedbackGeneric('Plan Purchase Experience')},
+      {label:'📱 App / Website', fn:()=>feedbackGeneric('App / Website')},
+      {label:'💬 General Feedback', fn:()=>feedbackGeneric('General Feedback')}
+    ]);
+  });
+}
+
+function feedbackSRRating(){
+  typing(()=>{
+    bot('How was your recent service experience for your <b>Air Conditioner</b>?<br>Pick an emoji that best describes it:');
+    botCard(`<div style="display:flex;justify-content:space-around;padding:8px 0;font-size:30px">
+      <span style="cursor:pointer" onclick="emojiRating(this,'😤','Very dissatisfied')" title="Very dissatisfied">😤</span>
+      <span style="cursor:pointer" onclick="emojiRating(this,'😕','Dissatisfied')" title="Dissatisfied">😕</span>
+      <span style="cursor:pointer" onclick="emojiRating(this,'😐','Neutral')" title="Neutral">😐</span>
+      <span style="cursor:pointer" onclick="emojiRating(this,'😊','Satisfied')" title="Satisfied">😊</span>
+      <span style="cursor:pointer" onclick="emojiRating(this,'🤩','Very satisfied')" title="Very satisfied">🤩</span>
+    </div>
+    <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--muted);padding:0 4px">
+      <span>Very poor</span><span>Excellent</span>
+    </div>`);
+    clearOpts();
+  });
+}
+
+function emojiRating(el, emoji, label){
+  // highlight selected
+  el.parentNode.querySelectorAll('span').forEach(s=>s.style.opacity='.3');
+  el.style.opacity='1';el.style.transform='scale(1.3)';
+  usr(`${emoji} ${label}`);
+  typing(()=>{
+    bot(`Thanks for sharing "${label}" — that means a lot to us!`);
+    bot('One more quick question: On a scale of 0–10, how likely are you to recommend Onsitego to a friend?');
+    botCard(`<div>
+      <div style="display:flex;gap:3px;flex-wrap:wrap;justify-content:center;padding:4px 0" id="nps-btns">
+        ${[0,1,2,3,4,5,6,7,8,9,10].map(n=>`<button onclick="npsPickChat(this,${n})" style="width:34px;height:34px;border-radius:8px;border:1px solid var(--line);background:#fff;font-size:12px;cursor:pointer;font-family:inherit;transition:.15s">${n}</button>`).join('')}
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:9px;color:var(--muted);margin-top:4px;padding:0 2px">
+        <span>Not at all likely</span><span>Extremely likely</span>
+      </div>
+    </div>`);
+    clearOpts();
+  });
+}
+
+function npsPickChat(el, val){
+  document.querySelectorAll('#nps-btns button').forEach(b=>{b.style.background='#fff';b.style.color='inherit';});
+  el.style.background='var(--primary)';el.style.color='#fff';
+  usr(`Score: ${val}`);
+  typing(()=>{
+    const msg = val>=9 ? "That's wonderful — thank you for being our advocate! 🎉"
+                : val>=7 ? "Thanks for the feedback! We'll work hard to earn a 10 next time."
+                : "Thank you for your honesty. We'll use this to improve our service.";
+    bot(msg);
+    bot('Would you like to tell us more about your experience?');
+    chatStage='support'; supportTopic='Feedback';
+    opts([{label:'Add a comment',fn:()=>{ chatStage='support';typing(()=>bot('Please go ahead and type your comment below.'));}},{label:'No, that\'s all',fn:()=>{chatStage=null;typing(()=>{bot('Thanks Anurag! Your feedback has been recorded. 🙏');opts([{label:'Back to Home',fn:()=>go('home')}]);});}}]);
+  });
+}
+
+function feedbackGeneric(topic){
+  typing(()=>{
+    bot(`Thanks for choosing to share your <b>${topic}</b> feedback!`);
+    bot('How would you rate your experience? (1 = Poor, 5 = Excellent)');
+    botCard(`<div style="display:flex;justify-content:space-around;padding:8px 0;font-size:26px">
+      ${[1,2,3,4,5].map(n=>`<span style="cursor:pointer" onclick="genericRating(this,${n},'${topic}')">${'★'.repeat(n)+'☆'.repeat(5-n)}</span>`).join('')}
+    </div>`);
+    clearOpts();
+  });
+}
+
+function genericRating(el, n, topic){
+  el.parentNode.querySelectorAll('span').forEach(s=>s.style.opacity='.35');
+  el.style.opacity='1';
+  usr(`${n} star${n>1?'s':''}`);
+  typing(()=>{
+    bot(`${n>=4?'Great to hear that! 🌟':'Thanks for the honest rating.'} What could we do better? (optional)`);
+    const questions = {
+      'Plan Purchase Experience':['Easy onboarding','Clear pricing','Good plan options','Quick activation'],
+      'App / Website':['Easy to navigate','Fast & responsive','Helpful information','Good design'],
+      'General Feedback':['Overall happy','Needs improvement','Great support team','Easy to use']
+    };
+    const qs = questions[topic]||['Easy process','Helpful team','Good communication','Quick resolution'];
+    botCard(`<div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:8px">Select all that apply:</div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap">${qs.map(q=>`<button class="ccp-opt" onclick="this.classList.toggle('sel');this.style.background=this.classList.contains('sel')?'var(--primary)':'var(--primary-pale)';this.style.color=this.classList.contains('sel')?'#fff':'var(--primary)'">${q}</button>`).join('')}</div>
+      <button class="btn full" style="margin-top:10px" onclick="submitGenericFeedback()">Submit</button>
+    </div>`);
+    clearOpts();
+  });
+}
+
+function submitGenericFeedback(){
+  usr('Feedback submitted');
+  typing(()=>{
+    bot('Thank you for your feedback! 🙏 It helps us build a better experience for you.');
+    opts([{label:'Back to Home',fn:()=>go('home')}]);
+  });
+}
+function genericBoot(){
+  bot("Hi Anurag 👋 I'm your Onsitego assistant.");
+  typing(()=>supportMenu());
+}
+function supportMenu(){
+  chatStage='support';supportTopic='General Query';
+  bot('How can I help you today?');
+  opts([
+    {label:'1. Create Service Request',fn:()=>startSRFlow('Support → Create Service Request')},
+    {label:'2. Check Plan Details',fn:()=>go('plans')},
+    {label:'3. Service Request Status',fn:()=>srStatusList()},
+    {label:'4. Payment / Refund',fn:()=>supportElaborate('Payment / Refund',true)},
+    {label:'5. Escalation & Support',fn:()=>supportElaborate('Escalation & Support')},
+    {label:'6. Replacement',fn:()=>supportElaborate('Replacement')},
+    {label:'7. Feedback',fn:()=>supportElaborate('Feedback')},
+    {label:'8. General Query',fn:()=>supportElaborate('General Query')}
+  ]);
+}
+function srStatusList(){
+  chatStage=null;
+  typing(()=>{
+    bot('Here are your active service requests:');
+    opts([
+      {label:'AC #260504-00001 · Technician Assigned',fn:()=>go('track-sr')},
+      {label:'Refrigerator #260502-00007 · Closure Pending',fn:()=>go('track-sr')},
+      {label:'⬅ Main menu',fn:()=>supportMenu()}
+    ]);
+  });
+}
+function supportElaborate(topic,showSRs){
+  supportTopic=topic;chatStage='support';
+  typing(()=>{
+    bot(`Sure — please describe your ${topic.toLowerCase()} concern.`);
+    const list=[];
+    if(showSRs){
+      bot('You can also pick the related request:');
+      list.push({label:'AC #260504-00001 (Active)',fn:()=>{chatStage='support';typing(()=>bot('Noted — regarding <b>SR #260504-00001</b>. Please describe the issue.'));}});
+    }
+    list.push({label:'⬅ Main menu',fn:()=>supportMenu()});
+    opts(list);
+  });
+}
+function handleSupportText(v){
+  const topic=supportTopic;chatStage=null;
+  typing(()=>{
+    if(topic==='Feedback'){
+      const tk='CRM-'+(Math.floor(Math.random()*9000)+1000);
+      bot(`Thank you! Feedback logged — ticket <b>#${tk}</b> created.`);
+      opts([{label:'⬅ Main menu',fn:()=>supportMenu()},{label:'Back to Home',fn:()=>go('home')}]);
+    } else if(topic==='Payment / Refund'){
+      bot("Thanks. If this hasn't resolved your concern, I can arrange a callback.");
+      opts([{label:'Arrange a callback',fn:()=>callbackMock()},{label:'⬅ Main menu',fn:()=>supportMenu()}]);
+    } else if(topic==='Replacement'){
+      bot("Replacement request noted. Our team will verify eligibility and update you.");
+      opts([{label:'Arrange a callback',fn:()=>callbackMock()},{label:'⬅ Main menu',fn:()=>supportMenu()}]);
+    } else if(topic==='Escalation & Support'){
+      bot("Concern escalated — you'll receive an update shortly.");
+      opts([{label:'Chat with agent',fn:()=>agentMock()},{label:'Arrange a callback',fn:()=>callbackMock()},{label:'⬅ Main menu',fn:()=>supportMenu()}]);
+    } else {
+      bot("Here's what I found. If you need more help, I can connect you with an agent.");
+      opts([{label:'Chat with agent',fn:()=>agentMock()},{label:'⬅ Main menu',fn:()=>supportMenu()},{label:'Back to Home',fn:()=>go('home')}]);
+    }
+  });
+}
+const PRE={'My Plans → Active → Raise SR':'WM','Plan Detail → Raise New SR':'AC'};
+function startSRFlow(source){
+  SR={source,category:null,plan:null,issue:null,mode:null,media:false,appt:null};
+  SR.support=/support/i.test(source);chatStage=null;
+  bot("Hi Anurag 👋 Let's raise a service request together.");
+  typing(()=>{
+    const pre=PRE[source];
+    if(pre){SR.category=pre;const c=CATS[pre];SR.plan=c.plans[0];
+      bot(`You're raising this from your <b>${c.plans[0].name}</b> plan — ${c.label} · ${c.plans[0].brand}. Continue?`);
+      opts([{label:'Yes, continue',fn:()=>planSelected()},{label:'Choose a different one',fn:()=>{SR.plan=null;SR.category=null;askCategory(true);}}]);
+    } else {askCategory(true);}
+  });
+}
+function askCategory(intro){
+  if(intro)bot('Here are devices with active plans. Select one:');
+  const list=Object.keys(CATS).map(k=>({label:CATS[k].label,fn:()=>listPlans(k)}));
+  list.push({label:"Can't find my category",fn:()=>cantFind()});
+  opts(list);
+}
+function listPlans(k){
+  SR.category=k;const c=CATS[k];
+  typing(()=>{
+    bot(`Plans under <b>${c.label}</b>:`);
+    c.plans.forEach((p,i)=>botEl(planPickCard(k,p,i)));
+    opts([{label:"Can't find my plan",fn:()=>cantFind()}]);
+  });
+}
+function planPickCard(k,p,i){
+  return `<div class="planpick" onclick="choosePlan(${i})">
+    <div class="pp-ic">${CATICON[k]}</div>
+    <div class="pp-tx"><div class="pp-name">${p.name}</div><div class="pp-sub">${CATS[k].label} · ${p.brand}</div><div class="pp-meta">Valid ${p.start} – ${p.end}</div><div class="pp-meta">Last SR: ${p.lastSR}</div></div>
+    <span class="pp-go">${I.chevR}</span>
+  </div>`;
+}
+function choosePlan(i){SR.plan=CATS[SR.category].plans[i];clearOpts();usr(`Selected: ${SR.plan.name}`);planSelected();}
+function planSelected(){
+  if(SR.plan.openSR){
+    typing(()=>{bot(`This plan already has open SR <b>#${SR.plan.openSR}</b>. Track it below.`);opts([{label:'Track existing SR',fn:()=>go('track-sr')},{label:'Back to Home',fn:()=>go('home')}]);});
+  } else askIssue();
+}
+function askIssue(){
+  const c=CATS[SR.category];
+  typing(()=>{bot(`What issue are you facing with your ${c.label}?`);opts(c.issues.map(iss=>({label:iss,fn:()=>pickIssue(iss)})).concat([{label:'Others',fn:()=>pickIssue('Others')}]));chatStage='issue';});
+}
+function pickIssue(iss){if(iss==='Others'){chatStage='issue';typing(()=>bot("Please describe the issue."));return;}chatStage=null;SR.issue=iss;troubleshoot();}
+function handleIssueText(v){
+  if(v.length<3){typing(()=>{bot('Could you describe the issue in more detail?');chatStage='issue';});return;}
+  chatStage=null;SR.issue=v;
+  typing(()=>{bot(`Got it — noted as "<b>${v}</b>".`);troubleshoot();});
+}
+function troubleshoot(){
+  typing(()=>{bot('Try remote tech support or go straight to an engineer visit?');opts([{label:'Tech Support',fn:()=>media('Tech Support')},{label:'Engineer Visit',fn:()=>media('Engineer Visit')}]);});
+}
+function media(mode){
+  SR.mode=mode;
+  typing(()=>{bot('You can share photos or a short video. (Optional)');opts([{label:'📎 Upload media',fn:()=>{SR.media=true;typing(()=>{bot('📷 2 files received. Thanks!');addressStep();});}},{label:'Skip for now',fn:()=>addressStep()}]);});
+}
+function addressStep(){
+  typing(()=>{bot(`Use your last service address?<br><br>📍 <b>${PRESET_ADDR}</b>`);opts([{label:'Use this address',fn:()=>mapStep()},{label:'Add new address',fn:()=>newAddr()}]);});
+}
+function mapStep(){
+  typing(()=>{bot('Confirm your exact location:');botCard(`<div class="mapmock"><span class="pin">${I.loc.replace('width="16" height="16"','width="30" height="30"')}</span>Drag to adjust • Powai, Mumbai</div>`);opts([{label:'📍 Confirm location',fn:()=>copayStep()}]);});
+}
+function newAddr(){
+  typing(()=>{bot('Enter your new address:');botCard(`<div class="addrform"><input placeholder="Flat / House no."><input placeholder="Society / Building"><input placeholder="Area / Locality"><input placeholder="Landmark"><div class="row"><input placeholder="Pincode"><input placeholder="City"></div><input placeholder="State"><button class="btn full" onclick="saveAddr()">Save &amp; continue</button></div>`);clearOpts();});
+}
+function saveAddr(){usr('New address saved');typing(()=>{bot('Address saved ✓');mapStep();});}
+function copayStep(){
+  const cp=SR.plan.copay;
+  if(!cp){apptStep();return;}
+  typing(()=>{bot(`A copayment of <b>₹${cp}</b> is applicable as per your plan.`);opts([{label:`Pay ₹${cp} now`,fn:()=>razorpay()},{label:'Know more',fn:()=>copayInfo()}]);});
+}
+function copayInfo(){
+  typing(()=>{bot("Copayment is defined in your plan's T&C.");opts([{label:`Pay ₹${SR.plan.copay} now`,fn:()=>razorpay()},{label:'View plan details',fn:()=>go('plan-detail')}]);});
+}
+function razorpay(){
+  typing(()=>{botCard(`<div class="rzp"><div class="rzp-h">Razorpay <span>SECURE</span></div><div class="rzp-b"><div class="rzp-amt">₹${SR.plan.copay}.00</div><div class="rzp-row">UPI · Cards · Netbanking · Wallets</div><button class="btn full" onclick="payDone()">Pay ₹${SR.plan.copay}</button></div></div>`);clearOpts();},500);
+}
+function payDone(){SR.copayPaid=true;usr(`Paid ₹${SR.plan.copay}`);typing(()=>{bot('✅ Payment successful!');apptStep();});}
+function apptStep(){
+  typing(()=>{bot('Pick an appointment date:');opts([{label:'Tomorrow · 03 Jun',fn:()=>created('03 Jun 2026')},{label:'Wed · 04 Jun',fn:()=>created('04 Jun 2026')},{label:'Thu · 05 Jun',fn:()=>created('05 Jun 2026')},{label:'No preference',fn:()=>created(null)}]);});
+}
+function created(date){
+  SR.appt=date;
+  const num='260602-'+String(Math.floor(Math.random()*90000)+10000);
+  typing(()=>{
+    bot('🎉 Your service request has been created!');
+    const c=CATS[SR.category];
+    botCard(`<div class="srsum-top"><div><div class="srsum-no">SR #${num}</div><div class="srsum-cat">${c.label} · ${SR.plan.brand}</div></div><span class="pill live"><span class="d"></span>LIVE</span></div>
+      <div class="kv"><span class="k">Plan</span><span class="v">${SR.plan.name}</span></div>
+      <div class="kv"><span class="k">Issue</span><span class="v">${SR.issue}</span></div>
+      <div class="kv"><span class="k">Mode</span><span class="v">${SR.mode}</span></div>
+      <div class="kv"><span class="k">Appointment</span><span class="v">${date||'To be scheduled'}</span></div>
+      <div class="kv"><span class="k">Copayment</span><span class="v">${SR.plan.copay?('₹'+SR.plan.copay+' · Paid'):'Not applicable'}</span></div>`);
+    const end=[{label:'Track this SR',fn:()=>go('track-sr')},{label:'Back to Home',fn:()=>go('home')}];
+    if(SR.support)end.splice(1,0,{label:'⬅ Support menu',fn:()=>supportMenu()});
+    opts(end);
+  },750);
+}
+function cantFind(){
+  typing(()=>{bot("Let's try to find your plan via another way:");opts([{label:'Try another mobile',fn:()=>{chatStage='mobile';typing(()=>bot('Enter the alternate mobile number. An OTP will be sent.'));}},{label:'Enter email ID',fn:()=>{chatStage='email';typing(()=>bot("Enter the email linked to your plan."));}},{label:'Enter invoice no.',fn:()=>{chatStage='invoice';typing(()=>bot('Enter the invoice number from your receipt.'));}},{label:'Chat with agent',fn:()=>agentMock()},{label:'Request callback',fn:()=>callbackMock()}]);});
+}
+function cantFindOutcome(msg){
+  typing(()=>{bot(msg);opts([{label:'Chat with agent',fn:()=>agentMock()},{label:'Request callback',fn:()=>callbackMock()},{label:'Start over',fn:()=>goChat(SR.source)}]);});
+}
+function agentMock(){typing(()=>{bot('🟢 Connecting you to a support agent…');opts([{label:'Back to Home',fn:()=>go('home')}]);});}
+function callbackMock(){typing(()=>{bot('📞 Callback requested! Our team will call you on +91 98XXX XXX12 shortly.');opts([{label:'Back to Home',fn:()=>go('home')}]);});}
+function sendChat(){
+  const f=document.getElementById('chatfield');const v=(f.value||'').trim();if(!v)return;
+  usr(v);f.value='';
+  if(chatStage==='issue'){handleIssueText(v);return;}
+  if(chatStage==='mobile'||chatStage==='email'){chatStage='otp';typing(()=>{bot('OTP sent. Enter the 6-digit code.');});return;}
+  if(chatStage==='otp'){chatStage=null;cantFindOutcome('No additional plans found. Connect with an agent?');return;}
+  if(chatStage==='invoice'){chatStage=null;cantFindOutcome("Invoice not matched. Let me connect you with someone who can help.");return;}
+  if(chatStage==='support'){handleSupportText(v);return;}
+  supportTopic=supportTopic||'General Query';handleSupportText(v);
+}
+
+/* boot → dashboard */
+showDashboard();
 </script>
 </body>
 </html>
