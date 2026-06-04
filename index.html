@@ -455,6 +455,11 @@ function showDashboard(){
         <div class="dbt"><h4>SR Closure Feedback</h4><p>Homepage with post-service closure feedback for AC</p></div>
         <div class="dbgo">${I.chevR}</div>
       </div>
+      <div class="dash-btn" onclick="launchScenario('copaymentPending')">
+        <div class="dbi" style="background:#fff3e0">💳</div>
+        <div class="dbt"><h4>Copayment Pending</h4><p>SR on hold — ₹500 copayment required to proceed</p></div>
+        <div class="dbgo">${I.chevR}</div>
+      </div>
     </div>
   </div></div>`;
 }
@@ -544,6 +549,29 @@ ${ccpRibbon}`;
 
 function buildSRSection(){
   if(currentScenario==='noSR') return '';
+
+  if(currentScenario==='copaymentPending'){
+    return `<div class="block">
+    <div class="sec-title">Track Service Requests <span class="count">1 On Hold</span></div>
+    <div class="rail">
+      <div class="srcard">
+        <div class="top"><h4>Air Conditioner</h4><span class="pill" style="background:#fff3e0;color:#e65100"><span class="d" style="background:#e65100"></span>ON HOLD</span></div>
+        <div class="srno">SR #260504-00001</div>
+        <div class="meta">Samsung Split AC · 1.5T</div>
+        <div style="font-size:12px;color:var(--red-text);font-weight:700;margin-top:8px">₹500 Copayment is pending</div>
+        <div class="row">
+          <span style="font-size:12px;font-weight:700;color:var(--red-text)">Copayment Pending</span>
+          <div style="display:flex;gap:8px">
+            <button class="btn sm yellow" onclick="toast('Opening payment gateway')">PAY</button>
+            <button class="btn sm" onclick="go('track-sr')">View ${I.chevR}</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="dots-ind"><i class="on"></i></div>
+    <div style="text-align:center;margin-top:6px;"><span class="viewall" onclick="go('service-request')" style="font-size:13px;color:var(--primary-light);cursor:pointer;">View All Requests →</span></div>
+  </div>`;
+  }
 
   if(currentScenario==='inactiveSR'){
     return `<div class="block">
@@ -726,15 +754,19 @@ SCREENS['track-sr'] = ()=>`
       </div>
       ${currentScenario==='inactiveSR'
         ? '<span class="pill closed-pill"><span class="d"></span>CLOSED</span>'
-        : '<span class="pill live"><span class="d"></span>LIVE</span>'}
+        : currentScenario==='copaymentPending'
+          ? '<span class="pill" style="background:#fff3e0;color:#e65100"><span class="d" style="background:#e65100"></span>ON HOLD</span>'
+          : '<span class="pill live"><span class="d"></span>LIVE</span>'}
     </div>
+    ${currentScenario==='copaymentPending' ? `<div style="display:flex;align-items:center;justify-content:space-between;background:var(--red-bg);padding:10px 14px;border-radius:12px;margin-top:12px"><span style="font-size:13px;font-weight:700;color:var(--red-text)">₹500 Copayment is pending</span><button class="btn sm yellow" onclick="toast('Opening payment gateway')">PAY</button></div>` : ''}
     <div class="capsule">${I.calendar} Engineer Visit · 04 Jun 2026</div>
   </div>
 
   <div class="card" id="prog">
     <div class="card-h" onclick="toggle('prog')"><h3>SR Progress</h3><span class="chev">${I.chevD}</span></div>
     <div class="card-body">
-      <div class="kv" style="margin-top:10px"><span class="k">Estimated Resolution</span><span class="v">06 Jun 2026</span></div>
+      <div class="kv" style="margin-top:10px"><span class="k">Status</span><span class="v" style="${currentScenario==='copaymentPending'?'color:var(--red-text)':''}">${currentScenario==='copaymentPending'?'Copayment Pending':'In Progress'}</span></div>
+      <div class="kv"><span class="k">Estimated Resolution</span><span class="v">06 Jun 2026</span></div>
       <div class="tl">
         <div class="item done"><div class="marker"><div class="mk"></div><div class="line"></div></div><div class="tx"><div class="t">Request Raised</div><div class="d">Your service request was created.</div></div></div>
         <div class="item done"><div class="marker"><div class="mk"></div><div class="line"></div></div><div class="tx"><div class="t">Technician Assigned</div><div class="d">A certified engineer is assigned to you.</div></div></div>
