@@ -118,10 +118,15 @@ body{
 .rate .sc{font-size:15px;font-weight:700;} .rate .sc small{font-size:11px;color:var(--muted);} .rate .stars{font-size:10px;color:var(--secondary);}
 
 /* tabbar */
-.tabbar{position:absolute;bottom:0;left:0;right:0;height:78px;background:#fff;border-top:1px solid var(--line);display:flex;align-items:center;justify-content:space-around;padding-bottom:8px;z-index:40;}
+.tabbar{position:absolute;bottom:0;left:0;right:0;height:78px;background:#fff;border-top:1px solid var(--line);display:flex;align-items:center;justify-content:space-around;padding-bottom:8px;z-index:40;overflow:visible;}
 .tab{display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;color:var(--muted);font-size:11px;flex:1;}
 .tab.on{color:var(--primary);}
 .tab .lbl{line-height:1.05;text-align:center;}
+/* center raised SR tab */
+.tab-raise{display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;flex:1;position:relative;top:-13px;}
+.tab-raise .tc-circle{width:50px;height:50px;border-radius:50%;background:#ffc20e;display:flex;align-items:center;justify-content:center;box-shadow:0 3px 10px rgba(255,194,14,.4);}
+.tab-raise .tc-circle:active{transform:scale(.93);}
+.tab-raise .tc-lbl{font-size:10px;font-weight:700;color:var(--primary);line-height:1.1;text-align:center;}
 
 /* fab */
 .fab{position:absolute;bottom:96px;right:18px;width:62px;height:62px;border-radius:50%;background:linear-gradient(135deg,var(--primary-light),var(--primary));display:flex;align-items:center;justify-content:center;box-shadow:0 8px 22px rgba(0,104,119,.35);cursor:pointer;z-index:45;}
@@ -409,6 +414,7 @@ const I = {
   img:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="M21 15l-5-5L5 21"/></svg>',
   rupee:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4h12M6 8h12M9 4c4 0 6 2 6 5s-2 5-6 5h-1l6 6"/></svg>',
   grid:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>',
+  tool:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#5a4000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>',
 };
 
 /* ============ SHARED ============ */
@@ -416,7 +422,11 @@ const footer = (active)=>`
 <div class="tabbar">
   <div class="tab ${active=='home'?'on':''}" onclick="go('home')">${I.home(active=='home'?1:0)}<span class="lbl">Home</span></div>
   <div class="tab ${active=='plans'?'on':''}" onclick="go('plans')">${I.hexnav}<span class="lbl">Plans</span></div>
-  <div class="tab ${active=='sr'?'on':''}" onclick="go('service-request')">${I.file}<span class="lbl">Service<br>Request</span></div>
+  <div class="tab-raise" onclick="goChat('Footer → Book Repair')">
+    <div class="tc-circle">${I.tool}</div>
+    <span class="tc-lbl">Book Repair</span>
+  </div>
+  <div class="tab ${active=='sr'?'on':''}" onclick="go('service-request')">${I.file}<span class="lbl">My SRs</span></div>
   <div class="tab ${active=='profile'?'on':''}" onclick="go('profile')">${I.user}<span class="lbl">Profile</span></div>
 </div>`;
 const fab = (source)=>`<div class="fab" onclick="goChat('${source}')">${I.chat}<span class="d"></span></div>`;
@@ -506,8 +516,8 @@ SCREENS.home = ()=>{
 
   <div class="sec-title" style="margin-top:4px">Quick Actions</div>
   <div class="quick">
-    <div class="qa p1" onclick="go('plans')"><span class="badge">2</span><div class="ic">${I.hex}</div><div class="lbl">My Plans</div></div>
-    <div class="qa p2" onclick="goChat('Homepage → Raise SR')"><div class="ic">${I.clock}</div><div class="lbl">Raise SR</div></div>
+    <div class="qa p1" onclick="go('plans')"><div class="ic">${I.hex}</div><div class="lbl">My Plans</div></div>
+    <div class="qa p2" onclick="goChat('Homepage → Book Repair')"><div class="ic">${I.clock}</div><div class="lbl">Book Repair</div></div>
     <div class="qa p3" onclick="goChat('Homepage → Support &amp; Query')"><div class="ic">${I.headset}</div><div class="lbl">Support &amp; Query</div></div>
   </div>
 
@@ -539,15 +549,6 @@ SCREENS.home = ()=>{
       <div class="partner" style="color:#1f6fb2">Bajaj</div>
       <div class="partner" style="color:#0d3040">Kohinoor</div>
       <div class="partner" style="color:#7d3c98">Sargam</div>
-    </div>
-  </div>
-
-  <div class="block">
-    <div class="sec-title">Your Voice Matters</div>
-    <div class="feedback" onclick="goChat('Homepage → Customer Feedback')">
-      <div class="ic">${I.chatSmall}</div>
-      <div class="tx"><h4>Tell us how we did</h4><p>Your feedback helps us serve you better.</p></div>
-      <div class="go">${I.chevR}</div>
     </div>
   </div>
 
@@ -880,7 +881,7 @@ SCREENS.plans = ()=>`
       <div class="daterow"><div class="dd"><div class="l">Start</div><div class="v">02 Mar 2026</div></div><div class="dd"><div class="l">End</div><div class="v">01 Mar 2027</div></div></div>
       <div class="warn">${I.escalate} Copayment applicable on each SR</div>
       <div class="ctarow">
-        <button class="btn full" onclick="goChat('My Plans → Active → Raise SR')">Raise SR</button>
+        <button class="btn full" onclick="goChat('My Plans → Active → Book Repair')">Book Repair</button>
         <button class="btn ghost full" onclick="go('plan-detail')">View Details</button>
       </div>
     </div>
@@ -935,7 +936,7 @@ SCREENS['plan-detail'] = ()=>`
     <div class="docrow" onclick="go('track-sr')" style="cursor:pointer"><div class="ic">${I.ac}</div><div class="info"><div class="t">SR #260314-00042 <span class="pill" style="font-size:9px;padding:2px 7px;background:#eee;color:#888">Closed</span></div><div class="s">Created 14 Mar · Closed 16 Mar</div></div>${I.chevR}</div>
   </div>
   <div class="card">
-    <button class="btn full" onclick="goChat('Plan Detail → Raise New SR')">${I.clock.replace('#a07800','#fff').replace('width="26" height="26"','width="18" height="18"')}&nbsp; Raise New SR</button>
+    <button class="btn full" onclick="goChat('Plan Detail → Book Repair')">${I.clock.replace('#a07800','#fff').replace('width="26" height="26"','width="18" height="18"')}&nbsp; Book Repair</button>
     <button class="btn ghost full" style="margin-top:10px" onclick="goChat('Plan Detail → Support &amp; Query')">${I.headset.replace('#3266c9','var(--primary)').replace('width="26" height="26"','width="18" height="18"')}&nbsp; Help / Support</button>
   </div>
 </div>
@@ -960,7 +961,7 @@ SCREENS['service-request'] = ()=>`
       <button class="btn full" style="margin-top:12px" onclick="go('track-sr')">Track SR</button>
     </div>
     <div class="card" style="text-align:center;border-style:dashed">
-      <button class="btn full" onclick="goChat('Service Request → Raise SR')">${I.clock.replace('#a07800','#fff').replace('width="26" height="26"','width="18" height="18"')}&nbsp; Raise a New Service Request</button>
+      <button class="btn full" onclick="goChat('Service Request → Book Repair')">${I.clock.replace('#a07800','#fff').replace('width="26" height="26"','width="18" height="18"')}&nbsp; Book a Repair</button>
     </div>
   </div>
   <div class="tabpane" id="sr-inactive">
@@ -968,7 +969,7 @@ SCREENS['service-request'] = ()=>`
       <div style="display:flex;justify-content:space-between;align-items:flex-start"><div style="display:flex;gap:11px;align-items:center"><div style="width:42px;height:42px;border-radius:12px;background:#eee;display:flex;align-items:center;justify-content:center;color:#777">${I.wash}</div><div><h3 style="font-size:15px">Washing Machine</h3><div style="font-size:12px;color:var(--muted)">SR #260410-00031</div></div></div><span class="pill" style="background:#eee;color:#888"><span class="d" style="background:#888"></span>Closed</span></div>
       <div class="kv" style="margin-top:12px"><span class="k">Created On</span><span class="v">10 Apr 2026</span></div>
       <div class="kv"><span class="k">Closed On</span><span class="v">13 Apr 2026</span></div>
-      <div style="display:flex;gap:10px;margin-top:12px"><button class="btn ghost full" onclick="go('track-sr')">View Detail</button><button class="btn full" onclick="goChat('Service Request → Inactive → Reopen')">Raise Again</button></div>
+      <div style="display:flex;gap:10px;margin-top:12px"><button class="btn ghost full" onclick="go('track-sr')">View Detail</button><button class="btn full" onclick="goChat('Service Request → Inactive → Reopen')">Book Repair</button></div>
     </div>
   </div>
 </div>
@@ -1070,7 +1071,7 @@ function typing(cb,delay=650){
 }
 function chatBoot(source){
   chatStage=null;SR={source};
-  if(/raise sr|raise new sr|raise a new|reopen/i.test(source))startSRFlow(source);
+  if(/book repair|raise sr|raise new sr|raise a new|reopen/i.test(source))startSRFlow(source);
   else if(/customer feedback/i.test(source)) feedbackBoot();
   else genericBoot();
 }
@@ -1292,7 +1293,7 @@ function handleSupportText(v){
     }
   });
 }
-const PRE={'My Plans → Active → Raise SR':'WM','Plan Detail → Raise New SR':'AC'};
+const PRE={'My Plans → Active → Book Repair':'WM','Plan Detail → Book Repair':'AC'};
 function startSRFlow(source){
   SR={source,category:null,plan:null,issue:null,mode:null,media:false,appt:null};
   SR.support=/support/i.test(source);chatStage=null;
