@@ -1,0 +1,1468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Onsitego — Interactive Prototype v2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --primary:#006877; --primary-light:#007d8f; --primary-lighter:#008fa3;
+  --primary-tint:#d0eef2; --primary-pale:#e8f6f8;
+  --secondary:#ffc20e; --secondary-soft:#fff5cc; --secondary-text:#a07800;
+  --bg:#ffffff; --card:#ffffff; --text:#0d3040; --muted:#6b8a93; --line:#d8e8ec;
+  --live-bg:#e1f4e9; --live-text:#1f9a59;
+  --blue-bg:#e6eefb; --blue-text:#3266c9;
+  --red-bg:#fdecec; --red-text:#d64545;
+  --shadow:0 6px 22px rgba(0,104,119,.08);
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+body{
+  font-family:'Montserrat',sans-serif;font-weight:400;
+  background:#b8d0d6;
+  background-image:radial-gradient(circle at 20% 10%,#c5dce2,transparent 55%),radial-gradient(circle at 80% 90%,#b0ccd2,transparent 55%);
+  min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px 0;color:var(--text);
+}
+.phone{position:relative;width:390px;height:844px;background:#0c1f22;border-radius:54px;padding:13px;box-shadow:0 30px 70px rgba(0,40,50,.45),0 4px 0 rgba(255,255,255,.04) inset;}
+.screenwrap{position:relative;width:100%;height:100%;background:#ffffff;border-radius:42px;overflow:hidden;display:flex;flex-direction:column;}
+#screens{position:relative;flex:1;min-height:0;}
+.notch{position:absolute;top:0;left:50%;transform:translateX(-50%);width:150px;height:30px;background:#0c1f22;border-radius:0 0 20px 20px;z-index:60;}
+.statusbar{height:50px;display:flex;align-items:flex-end;justify-content:space-between;padding:0 26px 6px;font-size:13px;font-weight:700;color:var(--text);position:relative;z-index:50;flex:0 0 auto;}
+.statusbar .dots{display:flex;gap:5px;align-items:center;}
+
+.screen{position:absolute;inset:0;display:none;flex-direction:column;}
+.screen.active{display:flex;}
+.scroll{flex:1;overflow-y:auto;overflow-x:hidden;padding-bottom:96px;}
+.scroll::-webkit-scrollbar{width:0;}
+
+/* appbar */
+.appbar{display:flex;align-items:center;justify-content:space-between;padding:6px 20px 10px;}
+.logo{display:flex;align-items:center;font-weight:700;font-size:22px;letter-spacing:-.3px;color:var(--primary);}
+.logo b{color:var(--secondary);font-weight:700;}
+.appbar-right{display:flex;align-items:center;gap:10px;}
+.lang{display:flex;align-items:center;gap:5px;background:#fff;border:1px solid var(--line);border-radius:20px;padding:6px 10px;font-size:12px;cursor:pointer;color:var(--primary);}
+.iconbtn{width:42px;height:42px;border-radius:50%;background:#fff;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;}
+.iconbtn .dot{position:absolute;top:9px;right:10px;width:8px;height:8px;border-radius:50%;background:var(--red-text);border:2px solid #fff;}
+.back-dash-btn{background:var(--primary-pale);border:1px solid var(--primary-tint);border-radius:20px;padding:5px 11px;font-size:11px;color:var(--primary);cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:5px;}
+
+/* section titles */
+.kicker{font-size:11px;font-weight:700;letter-spacing:1.5px;color:var(--primary-lighter);text-transform:uppercase;margin:0 20px 2px;}
+.sec-title{font-size:20px;font-weight:700;letter-spacing:-.3px;margin:0 20px 14px;display:flex;align-items:center;justify-content:space-between;}
+.sec-title .count{font-size:12px;background:var(--primary-tint);color:var(--primary);padding:5px 11px;border-radius:20px;}
+.sec-title .viewall{font-size:13px;color:var(--primary-light);cursor:pointer;}
+.block{margin-top:26px;}
+
+/* quick actions */
+.quick{display:grid;grid-template-columns:1fr 1fr 1fr;gap:11px;padding:4px 20px 0;}
+.qa{background:#fff;border:1px solid var(--line);border-radius:20px;padding:16px 10px;text-align:center;cursor:pointer;position:relative;transition:.18s;box-shadow:var(--shadow);}
+.qa:active{transform:scale(.96);}
+.qa .ic{width:54px;height:54px;border-radius:16px;display:flex;align-items:center;justify-content:center;margin:0 auto 9px;}
+.qa.p1 .ic{background:var(--primary-tint);} .qa.p2 .ic{background:var(--secondary-soft);} .qa.p3 .ic{background:var(--blue-bg);}
+.qa .lbl{font-size:12px;line-height:1.2;}
+.qa .badge{position:absolute;top:10px;right:12px;background:var(--primary);color:#fff;font-size:11px;font-weight:700;min-width:21px;height:21px;border-radius:11px;display:flex;align-items:center;justify-content:center;padding:0 5px;}
+
+/* SR rail */
+.rail{display:flex;gap:13px;overflow-x:auto;padding:2px 20px 8px;scroll-snap-type:x mandatory;}
+.rail::-webkit-scrollbar{display:none;}
+.srcard{flex:0 0 88%;scroll-snap-align:start;background:#fff;border:1px solid var(--line);border-radius:22px;padding:17px;box-shadow:var(--shadow);}
+.srcard .top{display:flex;justify-content:space-between;align-items:flex-start;}
+.srcard h4{font-size:17px;font-weight:700;}
+.srcard .srno{font-size:12px;color:var(--muted);margin-top:7px;}
+.srcard .meta{font-size:13px;margin-top:2px;}
+.pill{display:inline-flex;align-items:center;gap:5px;font-size:11px;padding:5px 10px;border-radius:20px;}
+.pill.live{background:var(--live-bg);color:var(--live-text);}
+.pill.blue{background:var(--blue-bg);color:var(--blue-text);}
+.pill.closed-pill{background:var(--red-bg);color:var(--red-text);}
+.pill .d{width:7px;height:7px;border-radius:50%;background:currentColor;}
+.stamp{display:inline-flex;align-items:center;gap:6px;font-size:12px;background:var(--secondary-soft);color:var(--secondary-text);padding:7px 12px;border-radius:20px;margin-top:14px;}
+.stamp .d{width:7px;height:7px;border-radius:50%;background:currentColor;}
+.srcard .row{display:flex;align-items:center;justify-content:space-between;margin-top:14px;gap:10px;}
+.btn{background:var(--primary);color:#fff;border:none;border-radius:14px;padding:11px 18px;font-size:13px;font-family:inherit;cursor:pointer;display:inline-flex;align-items:center;gap:7px;transition:.15s;}
+.btn:active{transform:scale(.96);} .btn.ghost{background:#fff;color:var(--primary);border:1.5px solid var(--primary);}
+.btn.full{width:100%;justify-content:center;}
+.btn.sm{padding:9px 14px;font-size:12px;}
+.btn.yellow{background:var(--secondary);color:#5a4000;}
+.dots-ind{display:flex;gap:6px;justify-content:center;margin-top:12px;}
+.dots-ind i{width:7px;height:7px;border-radius:50%;background:#cdd6d1;}.dots-ind i.on{width:20px;border-radius:4px;background:var(--primary-light);}
+
+/* stats banner */
+.statbanner{margin:0 20px;background:linear-gradient(120deg,var(--primary),var(--primary-light));border-radius:22px;padding:20px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;box-shadow:var(--shadow);}
+.statbanner .s{text-align:center;}
+.statbanner .n{font-size:23px;font-weight:700;color:var(--secondary);}
+.statbanner .t{font-size:11px;color:#b8e4ec;margin-top:3px;}
+
+/* promise */
+.promise{display:grid;grid-template-columns:1fr 1fr 1fr;gap:11px;padding:0 20px;}
+.pcard{background:#fff;border:1px solid var(--line);border-radius:18px;padding:16px 8px;text-align:center;box-shadow:var(--shadow);}
+.pcard .ic{width:46px;height:46px;border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 9px;}
+.pcard:nth-child(1) .ic{background:var(--primary-tint);} .pcard:nth-child(2) .ic{background:var(--secondary-soft);} .pcard:nth-child(3) .ic{background:var(--primary-tint);}
+.pcard .lbl{font-size:12px;line-height:1.25;}
+
+/* partners */
+.partners{display:flex;gap:10px;overflow-x:auto;padding:0 20px;}
+.partners::-webkit-scrollbar{display:none;}
+.partner{flex:0 0 auto;background:#fff;border:1px solid var(--line);border-radius:14px;padding:13px 18px;font-size:14px;box-shadow:var(--shadow);}
+
+/* feedback */
+.feedback{margin:0 20px;background:linear-gradient(120deg,var(--primary),var(--primary-light));border-radius:22px;padding:18px;display:flex;align-items:center;gap:14px;cursor:pointer;box-shadow:var(--shadow);}
+.feedback .ic{width:46px;height:46px;border-radius:14px;background:rgba(255,255,255,.18);display:flex;align-items:center;justify-content:center;flex:0 0 auto;}
+.feedback .tx{flex:1;color:#fff;} .feedback h4{font-size:15px;font-weight:700;} .feedback p{font-size:12px;opacity:.9;margin-top:2px;}
+.feedback .go{width:36px;height:36px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;color:var(--primary);flex:0 0 auto;}
+
+/* ratings */
+.ratings{display:flex;gap:11px;padding:0 20px;}
+.rate{flex:1;background:#fff;border:1px solid var(--line);border-radius:16px;padding:13px;display:flex;align-items:center;gap:9px;box-shadow:var(--shadow);}
+.rate .lg{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff;font-size:14px;flex:0 0 auto;}
+.rate .sc{font-size:15px;font-weight:700;} .rate .sc small{font-size:11px;color:var(--muted);} .rate .stars{font-size:10px;color:var(--secondary);}
+
+/* tabbar */
+.tabbar{position:absolute;bottom:0;left:0;right:0;height:78px;background:#fff;border-top:1px solid var(--line);display:flex;align-items:center;justify-content:space-around;padding-bottom:8px;z-index:40;overflow:visible;}
+.tab{display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;color:var(--muted);font-size:11px;flex:1;}
+.tab.on{color:var(--primary);}
+.tab .lbl{line-height:1.05;text-align:center;}
+/* center raised SR tab */
+.tab-raise{display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;flex:1;position:relative;top:-13px;}
+.tab-raise .tc-circle{width:50px;height:50px;border-radius:50%;background:var(--primary);display:flex;align-items:center;justify-content:center;box-shadow:0 3px 10px rgba(0,104,119,.28);}
+.tab-raise .tc-circle:active{transform:scale(.93);}
+.tab-raise .tc-lbl{font-size:10px;font-weight:700;color:var(--primary);line-height:1.1;text-align:center;}
+
+/* fab */
+.fab{position:absolute;bottom:96px;right:18px;width:62px;height:62px;border-radius:50%;background:linear-gradient(135deg,var(--primary-light),var(--primary));display:flex;align-items:center;justify-content:center;box-shadow:0 8px 22px rgba(0,104,119,.35);cursor:pointer;z-index:45;}
+.fab .d{position:absolute;top:6px;right:8px;width:13px;height:13px;border-radius:50%;background:var(--secondary);border:2px solid #fff;}
+.fab:active{transform:scale(.93);}
+
+/* page head */
+.pagehead{display:flex;align-items:center;gap:12px;padding:6px 18px 14px;}
+.pagehead .back{width:42px;height:42px;border-radius:50%;background:#fff;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;cursor:pointer;flex:0 0 auto;}
+.pagehead h2{font-size:20px;font-weight:700;letter-spacing:-.3px;}
+.pagehead .sub{font-size:12px;color:var(--muted);}
+
+/* card */
+.card{background:#fff;border:1px solid var(--line);border-radius:22px;padding:18px;margin:0 18px 14px;box-shadow:var(--shadow);}
+.card-h{display:flex;align-items:center;justify-content:space-between;cursor:pointer;}
+.card-h h3{font-size:15px;font-weight:700;}
+.chev{transition:.25s;color:var(--muted);}
+.collapsed .chev{transform:rotate(-90deg);}
+.collapsed .card-body{display:none;}
+.kv{display:flex;justify-content:space-between;font-size:13px;padding:7px 0;border-bottom:1px dashed var(--line);}
+.kv:last-child{border:none;} .kv .k{color:var(--muted);} .kv .v{font-weight:700;}
+.warn{display:flex;align-items:center;gap:8px;background:var(--secondary-soft);color:var(--secondary-text);font-size:12px;padding:10px 12px;border-radius:12px;margin-top:12px;}
+.copay{display:flex;align-items:center;justify-content:space-between;background:var(--red-bg);color:var(--red-text);font-size:13px;padding:12px 14px;border-radius:14px;margin-top:12px;}
+
+/* timeline */
+.tl{margin-top:8px;} .tl .item{display:flex;gap:13px;padding-bottom:4px;}
+.tl .marker{display:flex;flex-direction:column;align-items:center;}
+.tl .mk{width:14px;height:14px;border-radius:50%;border:3px solid var(--primary-light);background:#fff;margin-top:3px;}
+.tl .item.done .mk{background:var(--primary-light);}
+.tl .item.now .mk{background:var(--secondary);border-color:var(--secondary);box-shadow:0 0 0 4px var(--secondary-soft);}
+.tl .line{flex:1;width:2px;background:var(--line);min-height:18px;}
+.tl .item:last-child .line{display:none;}
+.tl .tx{padding-bottom:16px;} .tl .tx .t{font-size:13px;font-weight:700;} .tl .tx .d{font-size:11px;color:var(--muted);margin-top:2px;}
+
+/* doc rows */
+.docrow{display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid var(--line);}
+.docrow:last-child{border:none;}
+.docrow .ic{width:40px;height:40px;border-radius:11px;background:var(--primary-pale);display:flex;align-items:center;justify-content:center;flex:0 0 auto;color:var(--primary);}
+.docrow .info{flex:1;} .docrow .info .t{font-size:13px;font-weight:700;} .docrow .info .s{font-size:11px;color:var(--muted);}
+.docrow .acts{display:flex;gap:8px;}
+.miniic{width:34px;height:34px;border-radius:10px;background:var(--primary-pale);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--primary);}
+
+/* capsule */
+.capsule{display:inline-flex;align-items:center;gap:8px;background:var(--primary-pale);color:var(--primary);font-size:12px;padding:9px 14px;border-radius:20px;margin-top:12px;}
+
+/* help grid */
+.helpgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:6px;}
+.helpbtn{display:flex;align-items:center;gap:9px;background:#fff;border:1.5px solid var(--line);border-radius:14px;padding:13px;font-size:13px;cursor:pointer;transition:.15s;}
+.helpbtn:active{transform:scale(.97);border-color:var(--primary-light);}
+.helpbtn .ic{color:var(--primary);display:flex;}
+
+/* tabs */
+.tabs{display:flex;gap:8px;background:#dde8eb;border-radius:16px;padding:5px;margin:0 18px 16px;}
+.tabs .t{flex:1;text-align:center;padding:10px;font-size:13px;border-radius:12px;cursor:pointer;color:var(--muted);}
+.tabs .t.on{background:#fff;color:var(--primary);box-shadow:0 2px 8px rgba(0,104,119,.08);}
+.tabpane{display:none;} .tabpane.on{display:block;}
+
+/* search */
+.search{display:flex;align-items:center;gap:9px;background:#fff;border:1px solid var(--line);border-radius:16px;padding:12px 15px;margin:0 18px 16px;color:var(--muted);box-shadow:var(--shadow);}
+.search input{border:none;outline:none;flex:1;font-family:inherit;font-size:14px;color:var(--text);background:transparent;}
+
+/* plan card */
+.plancard{background:#fff;border:1px solid var(--line);border-radius:22px;padding:18px;margin:0 18px 14px;box-shadow:var(--shadow);}
+.plancard .ph{display:flex;gap:13px;align-items:flex-start;}
+.plancard .pic{width:50px;height:50px;border-radius:14px;background:var(--primary-tint);display:flex;align-items:center;justify-content:center;flex:0 0 auto;color:var(--primary);}
+.plancard .pt{flex:1;} .plancard .pt h4{font-size:16px;font-weight:700;} .plancard .pt .c{font-size:12px;color:var(--muted);margin-top:3px;}
+.daterow{display:flex;gap:10px;margin-top:14px;}
+.daterow .dd{flex:1;background:var(--bg);border-radius:12px;padding:10px 12px;}
+.daterow .dd .l{font-size:10px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.5px;}
+.daterow .dd .v{font-size:13px;font-weight:700;margin-top:3px;}
+.pmused{font-size:12px;color:var(--primary);background:var(--primary-pale);display:inline-block;padding:6px 11px;border-radius:20px;margin-top:12px;}
+.coverage{margin-top:12px;border-top:1px solid var(--line);padding-top:12px;}
+.coverage ul{list-style:none;margin-top:8px;} .coverage li{font-size:12px;padding:4px 0;display:flex;gap:8px;align-items:flex-start;}
+.coverage.collapsed ul,.coverage.collapsed .knowmore{display:none;}
+.knowmore{font-size:12px;font-weight:700;color:var(--primary-light);cursor:pointer;margin-top:8px;display:inline-block;}
+.ctarow{display:flex;gap:10px;margin-top:14px;}
+
+/* help banner */
+.helpbanner{margin:18px 18px 6px;background:var(--primary-pale);border:1.5px dashed var(--primary-light);border-radius:18px;padding:15px 17px;display:flex;align-items:center;gap:13px;cursor:pointer;}
+.helpbanner .ic{width:42px;height:42px;border-radius:12px;background:#fff;display:flex;align-items:center;justify-content:center;color:var(--primary);flex:0 0 auto;}
+.helpbanner .tx{flex:1;} .helpbanner h4{font-size:14px;font-weight:700;} .helpbanner p{font-size:11px;color:var(--muted);margin-top:1px;}
+
+/* chatbot */
+.chatscreen{background:#ffffff;}
+.chathead{display:flex;align-items:center;gap:12px;padding:6px 18px 12px;background:#fff;border-bottom:1px solid var(--line);}
+.chathead .av{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--primary-light),var(--primary));display:flex;align-items:center;justify-content:center;flex:0 0 auto;}
+.chathead .nm{font-size:16px;font-weight:700;} .chathead .st{font-size:11px;color:var(--live-text);display:flex;align-items:center;gap:5px;}
+.chathead .st .d{width:7px;height:7px;border-radius:50%;background:var(--live-text);}
+.chatbody{flex:1;overflow-y:auto;padding:18px;display:flex;flex-direction:column;gap:12px;}
+.entrytag{align-self:center;background:#fff;border:1px solid var(--line);border-radius:20px;padding:7px 14px;font-size:11px;color:var(--primary);}
+.bubble{max-width:80%;padding:12px 15px;border-radius:18px;font-size:13px;line-height:1.4;}
+.bubble.bot{align-self:flex-start;background:#fff;border:1px solid var(--line);border-bottom-left-radius:5px;}
+.bubble.user{align-self:flex-end;background:var(--primary);color:#fff;border-bottom-right-radius:5px;}
+.quickreplies{display:flex;flex-wrap:wrap;gap:8px;padding:0 18px 14px;}
+.qr{background:#fff;border:1.5px solid var(--primary-light);color:var(--primary);border-radius:20px;padding:9px 14px;font-size:12px;cursor:pointer;}
+.chatinput{display:flex;gap:9px;padding:12px 16px 16px;background:#fff;border-top:1px solid var(--line);}
+.chatinput input{flex:1;border:1px solid var(--line);border-radius:22px;padding:12px 16px;font-family:inherit;font-size:14px;outline:none;background:var(--bg);}
+.chatinput .send{width:46px;height:46px;border-radius:50%;background:var(--primary);display:flex;align-items:center;justify-content:center;flex:0 0 auto;cursor:pointer;}
+.bubble.typing{color:var(--muted);font-style:italic;}
+.botcard{align-self:stretch;background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px;box-shadow:var(--shadow);font-size:13px;animation:fadein .3s ease both;}
+.addrform{display:flex;flex-direction:column;gap:8px;}
+.addrform input{border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-family:inherit;font-size:13px;outline:none;width:100%;background:var(--bg);color:var(--text);}
+.addrform .row{display:flex;gap:8px;}
+.mapmock{height:124px;border-radius:12px;background:linear-gradient(135deg,#d0e8ee,#c0dce4);position:relative;display:flex;align-items:flex-end;justify-content:center;padding:10px;font-size:11px;color:var(--primary);overflow:hidden;}
+.mapmock::before{content:"";position:absolute;inset:0;background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:22px 22px;opacity:.55;}
+.mapmock .pin{position:absolute;top:40%;left:50%;transform:translate(-50%,-100%);color:var(--red-text);z-index:2;}
+.rzp{border-radius:14px;overflow:hidden;border:1px solid var(--line);}
+.rzp-h{background:#0c2f63;color:#fff;font-weight:700;font-size:14px;padding:12px 14px;display:flex;justify-content:space-between;align-items:center;}
+.rzp-h span{font-size:10px;background:rgba(255,255,255,.2);padding:3px 8px;border-radius:10px;}
+.rzp-b{padding:14px;}
+.rzp-amt{font-size:24px;font-weight:700;color:var(--text);}
+.rzp-row{font-size:12px;color:var(--muted);margin:6px 0 12px;}
+.srsum-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;}
+.srsum-no{font-size:15px;font-weight:700;}
+.srsum-cat{font-size:12px;color:var(--muted);margin-top:3px;}
+.planpick{align-self:stretch;display:flex;align-items:center;gap:12px;background:#fff;border:1px solid var(--line);border-radius:16px;padding:13px 14px;box-shadow:var(--shadow);cursor:pointer;transition:.15s;animation:fadein .3s ease both;}
+.planpick:active{transform:scale(.98);border-color:var(--primary-light);}
+.pp-ic{width:42px;height:42px;border-radius:12px;background:var(--primary-tint);display:flex;align-items:center;justify-content:center;color:var(--primary);flex:0 0 auto;}
+.pp-tx{flex:1;min-width:0;}
+.pp-name{font-size:14px;font-weight:700;}
+.pp-sub{font-size:12px;color:var(--muted);margin-top:2px;}
+.pp-meta{font-size:11px;color:var(--muted);margin-top:2px;}
+.pp-go{color:var(--muted);flex:0 0 auto;}
+
+/* profile */
+.prof-hero{background:linear-gradient(135deg,var(--primary),var(--primary-light));margin:0 18px 16px;border-radius:24px;padding:24px;color:#fff;display:flex;align-items:center;gap:15px;box-shadow:var(--shadow);}
+.prof-hero .av{width:62px;height:62px;border-radius:50%;background:rgba(255,255,255,.18);display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:700;flex:0 0 auto;}
+.prof-hero h3{font-size:19px;font-weight:700;} .prof-hero p{font-size:12px;opacity:.85;margin-top:3px;}
+.menu{background:#fff;border:1px solid var(--line);border-radius:20px;margin:0 18px 14px;overflow:hidden;box-shadow:var(--shadow);}
+.menu .mi{display:flex;align-items:center;gap:13px;padding:15px 17px;border-bottom:1px solid var(--line);cursor:pointer;}
+.menu .mi:last-child{border:none;}
+.menu .mi .ic{width:40px;height:40px;border-radius:11px;background:var(--primary-pale);display:flex;align-items:center;justify-content:center;color:var(--primary);flex:0 0 auto;}
+.menu .mi .t{flex:1;font-size:14px;} .menu .mi .ar{color:var(--muted);}
+
+/* toast */
+.toast{position:absolute;bottom:170px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--primary);color:#fff;font-size:12px;padding:11px 18px;border-radius:14px;opacity:0;transition:.25s;z-index:80;pointer-events:none;white-space:nowrap;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+/* NPS / CCP thin ribbon — above tabbar */
+.nps-ribbon,.ccp-ribbon{
+  position:absolute;bottom:78px;left:0;right:0;
+  background:#fff;border-top:2px solid var(--secondary);
+  display:flex;align-items:center;gap:10px;
+  padding:10px 16px;z-index:48;
+  box-shadow:0 -4px 14px rgba(0,104,119,.1);
+}
+.nps-ribbon .rib-text,.ccp-ribbon .rib-text{flex:1;font-size:12px;color:var(--text);line-height:1.3;}
+.nps-ribbon .rib-cta,.ccp-ribbon .rib-cta{
+  background:var(--primary);color:#fff;border:none;border-radius:10px;
+  padding:8px 18px;font-size:12px;font-family:inherit;cursor:pointer;white-space:nowrap;
+}
+.nps-ribbon .rib-dismiss,.ccp-ribbon .rib-dismiss{font-size:18px;cursor:pointer;color:var(--muted);background:none;border:none;line-height:1;padding:0 2px;}
+
+/* NPS modal popup */
+.modal-overlay{position:absolute;inset:0;background:rgba(0,0,0,.45);z-index:90;display:flex;align-items:center;justify-content:center;padding:24px;}
+.modal-box{background:#fff;border-radius:24px;padding:28px 22px 22px;width:100%;box-shadow:0 20px 50px rgba(0,0,0,.18);animation:fadein .25s ease both;}
+.modal-box .modal-icon{width:52px;height:52px;border-radius:50%;background:var(--primary-tint);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;color:var(--primary);}
+.modal-box h3{font-size:18px;font-weight:700;text-align:center;color:var(--text);margin-bottom:10px;}
+.modal-box p{font-size:13px;color:var(--muted);text-align:center;line-height:1.6;}
+.modal-box .modal-cta{margin-top:22px;width:100%;}
+
+/* NPS full rating screen */
+.nps-bar{display:flex;border-radius:12px;overflow:hidden;margin:0 20px;}
+.nps-bar .nb{flex:1;height:46px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff;cursor:pointer;transition:opacity .15s;}
+.nps-bar .nb:hover{opacity:.82;}
+.nps-bar .nb.sel{outline:3px solid #0d3040;outline-offset:-2px;}
+.nps-zone{display:flex;gap:6px;margin:10px 20px 0;}
+.nps-zone .nz{flex:1;border-radius:8px;padding:8px 6px;text-align:center;}
+.nps-zone .nz .nz-label{font-size:11px;font-weight:700;}
+.nps-zone .nz .nz-sub{font-size:9px;margin-top:2px;line-height:1.3;}
+
+/* reusable chip option (feedback flow) */
+.ccp-opt{background:var(--primary-pale);border:1px solid var(--primary-tint);color:var(--primary);border-radius:20px;padding:6px 12px;font-size:11px;cursor:pointer;font-family:inherit;}
+.ccp-opt.sel{background:var(--primary);color:#fff;}
+
+/* SR status page — sticky help footer */
+.sr-help-bar{
+  position:absolute;bottom:0;left:0;right:0;height:56px;
+  background:var(--primary);display:flex;align-items:center;justify-content:center;
+  gap:8px;cursor:pointer;z-index:44;
+  box-shadow:0 -4px 14px rgba(0,104,119,.2);
+}
+.sr-help-bar span{font-size:13px;color:#fff;}
+/* Bottom sheet overlay */
+.sheet-overlay{position:absolute;inset:0;background:rgba(0,0,0,.35);z-index:70;display:flex;flex-direction:column;justify-content:flex-end;}
+.sheet{background:#fff;border-radius:24px 24px 0 0;padding:10px 0 28px;}
+.sheet-handle{width:40px;height:4px;background:var(--line);border-radius:2px;margin:0 auto 16px;}
+.sheet-title{font-size:14px;font-weight:700;padding:0 20px 12px;color:var(--text);}
+.sheet-item{display:flex;align-items:center;gap:14px;padding:14px 20px;border-top:1px solid var(--line);cursor:pointer;}
+.sheet-item .si-ic{width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex:0 0 auto;}
+.sheet-item .si-tx h4{font-size:14px;font-weight:700;}
+.sheet-item .si-tx p{font-size:11px;color:var(--muted);margin-top:1px;}
+
+/* DASHBOARD */
+.dashboard{position:absolute;inset:0;overflow-y:auto;display:flex;flex-direction:column;background:#ffffff;}
+.dash-header{padding:30px 20px 24px;background:linear-gradient(135deg,var(--primary),var(--primary-light));}
+.dash-logo{font-size:26px;font-weight:700;color:#fff;margin-bottom:4px;}
+.dash-logo b{color:var(--secondary);font-weight:700;}
+.dash-tagline{font-size:12px;color:rgba(255,255,255,.8);margin-bottom:0;}
+.dash-label{font-size:11px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted);margin:18px 18px 10px;}
+.dash-scenarios{padding:0 14px 24px;display:flex;flex-direction:column;gap:10px;}
+.dash-btn{display:flex;align-items:center;gap:14px;background:#fff;border:1px solid var(--line);border-radius:18px;padding:16px;cursor:pointer;transition:.15s;box-shadow:var(--shadow);}
+.dash-btn:active{transform:scale(.98);border-color:var(--primary-light);}
+.dash-btn .dbi{width:50px;height:50px;border-radius:14px;display:flex;align-items:center;justify-content:center;flex:0 0 auto;font-size:22px;}
+.dash-btn .dbt{flex:1;}
+.dash-btn .dbt h4{font-size:14px;font-weight:700;color:var(--text);}
+.dash-btn .dbt p{font-size:11px;color:var(--muted);margin-top:2px;}
+.dash-btn .dbgo{color:var(--muted);}
+
+@keyframes fadein{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+.scroll>*{animation:fadein .35s ease both;}
+
+/* Full-screen map overlay */
+.map-overlay{position:absolute;inset:0;z-index:80;display:flex;flex-direction:column;background:#c8dfe6;animation:fadein .2s ease both;}
+.map-overlay-head{background:#fff;padding:14px 18px 12px;display:flex;align-items:center;gap:12px;box-shadow:0 2px 10px rgba(0,0,0,.08);flex:0 0 auto;}
+.map-overlay-head .mob{width:38px;height:38px;border-radius:50%;background:var(--primary-pale);border:1px solid var(--primary-tint);display:flex;align-items:center;justify-content:center;cursor:pointer;flex:0 0 auto;color:var(--primary);}
+.map-overlay-head .pin-box{flex:1;background:var(--primary-pale);border:1px solid var(--primary-tint);border-radius:12px;padding:9px 13px;}
+.map-overlay-head .pin-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);}
+.map-overlay-head .pin-val{font-size:16px;font-weight:700;color:var(--primary);margin-top:1px;}
+.map-area{flex:1;position:relative;overflow:hidden;}
+.map-area::before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(0,104,119,.08) 1px,transparent 1px),linear-gradient(90deg,rgba(0,104,119,.08) 1px,transparent 1px);background-size:28px 28px;}
+.map-area::after{content:"";position:absolute;top:50%;left:30%;width:40%;height:3px;background:rgba(0,104,119,.15);border-radius:2px;transform:translateY(10px);}
+.map-road-h{position:absolute;top:38%;left:0;right:0;height:10px;background:rgba(255,255,255,.55);border-top:1px solid rgba(0,104,119,.12);border-bottom:1px solid rgba(0,104,119,.12);}
+.map-road-v{position:absolute;top:0;bottom:0;left:48%;width:10px;background:rgba(255,255,255,.55);border-left:1px solid rgba(0,104,119,.12);border-right:1px solid rgba(0,104,119,.12);}
+.map-block{position:absolute;background:rgba(255,255,255,.4);border:1px solid rgba(0,104,119,.12);border-radius:4px;}
+.map-pin-wrap{position:absolute;top:50%;left:50%;transform:translate(-50%,-100%) translateY(-6px);z-index:2;display:flex;flex-direction:column;align-items:center;}
+.map-pin-wrap .pin-icon{color:var(--red-text);filter:drop-shadow(0 2px 4px rgba(0,0,0,.25));}
+.map-pin-wrap .pin-pulse{width:16px;height:6px;background:rgba(0,0,0,.18);border-radius:50%;margin-top:2px;}
+.map-addr-chip{position:absolute;bottom:16px;left:50%;transform:translateX(-50%);background:#fff;border-radius:14px;padding:10px 16px;box-shadow:0 4px 16px rgba(0,0,0,.18);font-size:12px;color:var(--text);white-space:nowrap;font-weight:700;}
+.map-overlay-foot{background:#fff;padding:14px 18px;display:flex;gap:10px;box-shadow:0 -2px 10px rgba(0,0,0,.07);flex:0 0 auto;}
+</style>
+</head>
+<body>
+<div class="phone">
+  <div class="notch"></div>
+  <div class="screenwrap" id="root">
+    <div class="statusbar">
+      <span>9:41</span>
+      <span class="dots"><span>📶</span><span>🔋</span></span>
+    </div>
+    <div id="screens"></div>
+    <div class="toast" id="toast"></div>
+  </div>
+</div>
+<script>
+/* ============ ICONS ============ */
+const I = {
+  loc:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>',
+  bell:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0d3040" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>',
+  globe:'<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20M12 2a15 15 0 0 0 0 20"/></svg>',
+  hex:'<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 2l8.5 5v10L12 22l-8.5-5V7z"/></svg>',
+  clock:'<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#a07800" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>',
+  headset:'<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#3266c9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14v-2a8 8 0 0 1 16 0v2"/><rect x="2" y="13" width="5" height="7" rx="2"/><rect x="17" y="13" width="5" height="7" rx="2"/><path d="M20 18v1a3 3 0 0 1-3 3h-3"/></svg>',
+  headsetW:'<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14v-2a8 8 0 0 1 16 0v2"/><rect x="2" y="13" width="5" height="7" rx="2"/><rect x="17" y="13" width="5" height="7" rx="2"/><path d="M20 18v1a3 3 0 0 1-3 3h-3"/></svg>',
+  home:c=>`<svg width="23" height="23" viewBox="0 0 24 24" fill="${c==1?'currentColor':'none'}" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5L12 3l9 7.5"/><path d="M5 9.5V20h14V9.5"/></svg>`,
+  hexnav:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 2l8.5 5v10L12 22l-8.5-5V7z"/></svg>',
+  file:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h6"/></svg>',
+  user:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></svg>',
+  chat:'<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-8.5 8.5 9 9 0 0 1-3.8-.8L3 21l1.9-5.2A8.38 8.38 0 0 1 4 11.5 8.5 8.5 0 0 1 12.5 3 8.38 8.38 0 0 1 21 11.5z"/></svg>',
+  chatSmall:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-8.5 8.5 9 9 0 0 1-3.8-.8L3 21l1.9-5.2A8.38 8.38 0 0 1 4 11.5 8.5 8.5 0 0 1 12.5 3 8.38 8.38 0 0 1 21 11.5z"/></svg>',
+  search:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4-4"/></svg>',
+  logout:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg>',
+  back:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0d3040" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>',
+  backW:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>',
+  chevR:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>',
+  chevD:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>',
+  copy:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>',
+  check:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#006877" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.5 2.5L16 9"/></svg>',
+  star:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#a07800" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3 6.5 7 .9-5 4.9 1.2 7L12 18l-6.4 3.3L7 14.3 2 9.4l7-.9z"/></svg>',
+  shield:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#006877" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 3v6c0 5-3.5 8.5-8 11-4.5-2.5-8-6-8-11V5z"/><path d="M9 12l2 2 4-4"/></svg>',
+  view:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg>',
+  download:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 11l5 5 5-5M4 21h16"/></svg>',
+  calendar:'<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>',
+  reschedule:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7M21 4v4h-4"/></svg>',
+  escalate:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 20h20z"/><path d="M12 9v5M12 17h.01"/></svg>',
+  query:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 0 1 4.5 1.5c0 1.5-2 2-2 3.5M12 17h.01"/></svg>',
+  cancel:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M15 9l-6 6M9 9l6 6"/></svg>',
+  plan:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3 5-5"/><rect x="3" y="3" width="18" height="18" rx="3"/></svg>',
+  send:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4z"/></svg>',
+  ac:'<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="9" rx="2"/><path d="M6 17v1M10 17v2M14 17v2M18 17v1M5 8h14"/></svg>',
+  wash:'<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"/><circle cx="12" cy="13" r="5"/><path d="M8 6h.01M11 6h.01"/></svg>',
+  tv:'<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="13" rx="2"/><path d="M8 21h8M12 17v4"/></svg>',
+  fridge:'<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M5 10h14M9 5v2M9 13v3"/></svg>',
+  doc:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>',
+  img:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="M21 15l-5-5L5 21"/></svg>',
+  rupee:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4h12M6 8h12M9 4c4 0 6 2 6 5s-2 5-6 5h-1l6 6"/></svg>',
+  grid:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>',
+  tool:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>',
+};
+
+/* ============ SHARED ============ */
+const footer = (active)=>`
+<div class="tabbar">
+  <div class="tab ${active=='home'?'on':''}" onclick="go('home')">${I.home(active=='home'?1:0)}<span class="lbl">Home</span></div>
+  <div class="tab ${active=='plans'?'on':''}" onclick="go('plans')">${I.hexnav}<span class="lbl">Plans</span></div>
+  <div class="tab-raise" onclick="goChat('Footer → Raise SR')">
+    <div class="tc-circle">${I.tool}</div>
+    <span class="tc-lbl">Raise SR</span>
+  </div>
+  <div class="tab ${active=='sr'?'on':''}" onclick="go('service-request')">${I.file}<span class="lbl">My SRs</span></div>
+  <div class="tab ${active=='profile'?'on':''}" onclick="go('profile')">${I.user}<span class="lbl">Profile</span></div>
+</div>`;
+const fab = (source)=>`<div class="fab" onclick="goChat('${source}')">${I.chat}<span class="d"></span></div>`;
+const head = (title,sub)=>`
+<div class="pagehead">
+  <div class="back" onclick="go('home')">${I.back}</div>
+  <div><h2>${title}</h2>${sub?`<div class="sub">${sub}</div>`:''}</div>
+</div>`;
+
+const logoHtml = `<div class="logo">Onsite<b>go</b></div>`;
+const appbarRight = `<div class="appbar-right">
+  <div class="lang" onclick="toast('Language selection')">${I.globe} EN</div>
+  <div class="iconbtn" onclick="toast('Notifications')">${I.bell}<span class="dot"></span></div>
+</div>`;
+const backDashBtn = `<button class="back-dash-btn" onclick="showDashboard()">${I.backW.replace('#fff','currentColor')} Demo</button>`;
+
+/* ============ SCENARIO STATE ============ */
+let currentScenario = 'activeSR';
+
+/* ============ SCREENS ============ */
+const SCREENS = {};
+
+/* ---- DASHBOARD ---- */
+function showDashboard(){
+  const mount = document.getElementById('screens');
+  mount.innerHTML = `<div class="screen active"><div class="dashboard">
+    <div class="dash-header">
+      <div class="dash-logo">Onsite<b>go</b></div>
+      <div class="dash-tagline">App Prototype — Select a scenario to demo</div>
+    </div>
+    <div class="dash-label">Choose scenario</div>
+    <div class="dash-scenarios">
+      <div class="dash-btn" onclick="launchScenario('activeSR')">
+        <div class="dbi" style="background:#e1f4e9">🟢</div>
+        <div class="dbt"><h4>Active SR</h4><p>Homepage with live service requests in progress</p></div>
+        <div class="dbgo">${I.chevR}</div>
+      </div>
+      <div class="dash-btn" onclick="launchScenario('noSR')">
+        <div class="dbi" style="background:#e8f6f8">📋</div>
+        <div class="dbt"><h4>No SR</h4><p>Homepage with no active service requests</p></div>
+        <div class="dbgo">${I.chevR}</div>
+      </div>
+      <div class="dash-btn" onclick="launchScenario('inactiveSR')">
+        <div class="dbi" style="background:#fdecec">🔴</div>
+        <div class="dbt"><h4>Inactive / Closed SR</h4><p>Homepage showing closed SRs in red</p></div>
+        <div class="dbgo">${I.chevR}</div>
+      </div>
+      <div class="dash-btn" onclick="launchScenario('nps')">
+        <div class="dbi" style="background:#fff5cc">⭐</div>
+        <div class="dbt"><h4>NPS Feedback</h4><p>Homepage with NPS rating prompt for AC</p></div>
+        <div class="dbgo">${I.chevR}</div>
+      </div>
+      <div class="dash-btn" onclick="launchScenario('ccp')">
+        <div class="dbi" style="background:#d0eef2">✅</div>
+        <div class="dbt"><h4>SR Closure Feedback</h4><p>Homepage with post-service closure feedback for AC</p></div>
+        <div class="dbgo">${I.chevR}</div>
+      </div>
+      <div class="dash-btn" onclick="launchScenario('copaymentPending')">
+        <div class="dbi" style="background:#fff3e0">💳</div>
+        <div class="dbt"><h4>Copayment Pending</h4><p>SR on hold — ₹500 copayment required to proceed</p></div>
+        <div class="dbgo">${I.chevR}</div>
+      </div>
+    </div>
+  </div></div>`;
+}
+
+function launchScenario(scenario){
+  currentScenario = scenario;
+  go('home');
+  if(scenario === 'nps') setTimeout(()=>npsShowModal(), 80);
+}
+
+/* ---- HOME ---- */
+SCREENS.home = ()=>{
+  const srSection = buildSRSection();
+  const npsRibbon = currentScenario==='nps' ? buildNPSRibbon() : '';
+  const ccpRibbon = currentScenario==='ccp' ? buildCCPRibbon() : '';
+  return `
+<div class="scroll">
+  <div class="appbar">
+    ${logoHtml}
+    <div class="appbar-right">
+      <button class="back-dash-btn" onclick="showDashboard()">${I.grid} Demo</button>
+      <div class="iconbtn" onclick="toast('Notifications')">${I.bell}<span class="dot"></span></div>
+    </div>
+  </div>
+
+  <div class="sec-title" style="margin-top:4px">Quick Actions</div>
+  <div class="quick">
+    <div class="qa p1" onclick="go('plans')"><span class="badge">2</span><div class="ic">${I.hex}</div><div class="lbl">My Plans</div></div>
+    <div class="qa p2" onclick="goChat('Homepage → Raise SR')"><div class="ic">${I.clock}</div><div class="lbl">Raise SR</div></div>
+    <div class="qa p3" onclick="goChat('Homepage → Support &amp; Query')"><div class="ic">${I.headset}</div><div class="lbl">Support &amp; Query</div></div>
+  </div>
+
+  ${srSection}
+
+  <div class="block">
+    <div class="sec-title">Why Customers Love Us</div>
+    <div class="statbanner">
+      <div class="s"><div class="n">50K+</div><div class="t">SRs Resolved</div></div>
+      <div class="s"><div class="n">800+</div><div class="t">Retailers</div></div>
+      <div class="s"><div class="n">1,200+</div><div class="t">Service Centres</div></div>
+    </div>
+  </div>
+
+  <div class="block">
+    <div class="sec-title">Our Service Promise</div>
+    <div class="promise">
+      <div class="pcard"><div class="ic">${I.check}</div><div class="lbl">Genuine Parts</div></div>
+      <div class="pcard"><div class="ic">${I.star}</div><div class="lbl">90-Day Warranty</div></div>
+      <div class="pcard"><div class="ic">${I.shield}</div><div class="lbl">Authorised Centres</div></div>
+    </div>
+  </div>
+
+  <div class="block">
+    <div class="sec-title">Trusted Partners</div>
+    <div class="partners">
+      <div class="partner" style="color:#c0392b">Croma</div>
+      <div class="partner" style="color:#c0392b">Vijay Sales</div>
+      <div class="partner" style="color:#1f6fb2">Bajaj</div>
+      <div class="partner" style="color:#0d3040">Kohinoor</div>
+      <div class="partner" style="color:#7d3c98">Sargam</div>
+    </div>
+  </div>
+
+  <div class="block">
+    <div class="sec-title">Ratings</div>
+    <div class="ratings">
+      <div class="rate"><span class="lg" style="background:#232f3e">a</span><div><div class="sc">4.5<small>/5</small></div><div class="stars">★★★★★</div></div></div>
+      <div class="rate"><span class="lg" style="background:#1877f2">f</span><div><div class="sc">4.5<small>/5</small></div><div class="stars">★★★★★</div></div></div>
+      <div class="rate"><span class="lg" style="background:#fff;border:1px solid var(--line);color:#34a853">▶</span><div><div class="sc">4.6<small>/5</small></div><div class="stars">★★★★★</div></div></div>
+    </div>
+  </div>
+</div>
+${fab('Homepage')}
+${footer('home')}
+${npsRibbon}
+${ccpRibbon}`;
+};
+
+function buildSRSection(){
+  if(currentScenario==='noSR') return '';
+
+  if(currentScenario==='copaymentPending'){
+    return `<div class="block">
+    <div class="sec-title">Track Service Requests <span class="count">1 On Hold</span></div>
+    <div class="rail">
+      <div class="srcard">
+        <div class="top"><h4>Air Conditioner</h4><span class="pill" style="background:#fff3e0;color:#e65100"><span class="d" style="background:#e65100"></span>ON HOLD</span></div>
+        <div class="srno">SR #260504-00001</div>
+        <div class="meta">Samsung Split AC · 1.5T</div>
+        <div style="font-size:12px;color:var(--red-text);font-weight:700;margin-top:8px">₹500 Copayment is pending</div>
+        <div class="row">
+          <span style="font-size:12px;font-weight:700;color:var(--red-text)">Copayment Pending</span>
+          <div style="display:flex;gap:8px">
+            <button class="btn sm yellow" onclick="toast('Opening payment gateway')">PAY</button>
+            <button class="btn sm" onclick="go('track-sr')">View ${I.chevR}</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="dots-ind"><i class="on"></i></div>
+    <div style="text-align:center;margin-top:6px;"><span class="viewall" onclick="go('service-request')" style="font-size:13px;color:var(--primary-light);cursor:pointer;">View All Requests →</span></div>
+  </div>`;
+  }
+
+  if(currentScenario==='inactiveSR'){
+    return `<div class="block">
+    <div class="sec-title">Track Service Requests <span class="count">3 Closed</span></div>
+    <div class="rail">
+      <div class="srcard">
+        <div class="top"><h4>Air Conditioner</h4><span class="pill closed-pill"><span class="d"></span>CLOSED</span></div>
+        <div class="srno">SR #260504-00001</div>
+        <div class="meta">Samsung Split AC · 1.5T</div>
+        <div class="row"><span class="stamp" style="background:var(--red-bg);color:var(--red-text)"><span class="d"></span>Service Completed</span><button class="btn sm" onclick="go('track-sr')">View ${I.chevR}</button></div>
+      </div>
+      <div class="srcard">
+        <div class="top"><h4>Washing Machine</h4><span class="pill closed-pill"><span class="d"></span>CLOSED</span></div>
+        <div class="srno">SR #260503-00018</div>
+        <div class="meta">LG Front Load · 7kg</div>
+        <div class="row"><span class="stamp" style="background:var(--red-bg);color:var(--red-text)"><span class="d"></span>Resolved &amp; Closed</span><button class="btn sm" onclick="go('track-sr')">View ${I.chevR}</button></div>
+      </div>
+      <div class="srcard">
+        <div class="top"><h4>Refrigerator</h4><span class="pill closed-pill"><span class="d"></span>CLOSED</span></div>
+        <div class="srno">SR #260502-00007</div>
+        <div class="meta">Whirlpool · 265L</div>
+        <div class="row"><span class="stamp" style="background:var(--red-bg);color:var(--red-text)"><span class="d"></span>Resolved &amp; Closed</span><button class="btn sm" onclick="go('track-sr')">View ${I.chevR}</button></div>
+      </div>
+    </div>
+    <div class="dots-ind"><i class="on"></i><i></i><i></i></div>
+    <div style="text-align:center;margin-top:6px;"><span class="viewall" onclick="go('service-request')" style="font-size:13px;color:var(--primary-light);cursor:pointer;">View All Requests →</span></div>
+  </div>`;
+  }
+
+  // activeSR, nps, ccp — show active SR section
+  return `<div class="block">
+    <div class="sec-title">Track Service Requests <span class="count">3 Active</span></div>
+    <div class="rail">
+      <div class="srcard">
+        <div class="top"><h4>Air Conditioner</h4><span class="pill live"><span class="d"></span>LIVE</span></div>
+        <div class="srno">SR #260504-00001</div>
+        <div class="meta">Samsung Split AC · 1.5T</div>
+        <div class="row"><span class="stamp"><span class="d"></span>Technician Assigned</span><button class="btn sm" onclick="go('track-sr')">View ${I.chevR}</button></div>
+      </div>
+      <div class="srcard">
+        <div class="top"><h4>Washing Machine</h4><span class="pill blue"><span class="d"></span>LIVE</span></div>
+        <div class="srno">SR #260503-00018</div>
+        <div class="meta">LG Front Load · 7kg</div>
+        <div class="row"><span class="stamp"><span class="d"></span>Service Scheduled</span><button class="btn sm" onclick="go('track-sr')">View ${I.chevR}</button></div>
+      </div>
+      <div class="srcard">
+        <div class="top"><h4>Refrigerator</h4><span class="pill live"><span class="d"></span>LIVE</span></div>
+        <div class="srno">SR #260502-00007</div>
+        <div class="meta">Whirlpool · 265L</div>
+        <div class="row"><span class="stamp"><span class="d"></span>Part Ordered</span><button class="btn sm" onclick="go('track-sr')">View ${I.chevR}</button></div>
+      </div>
+    </div>
+    <div class="dots-ind"><i class="on"></i><i></i><i></i></div>
+    <div style="text-align:center;margin-top:6px;"><span class="viewall" onclick="go('service-request')" style="font-size:13px;color:var(--primary-light);cursor:pointer;">View All Requests →</span></div>
+  </div>`;
+}
+
+function buildNPSRibbon(){
+  return `<div class="nps-ribbon" id="nps-ribbon">
+    <span class="rib-text">How did you like the service for Air Conditioner?</span>
+    <button class="rib-cta" onclick="npsOK()">OK</button>
+    <button class="rib-dismiss" onclick="document.getElementById('nps-ribbon').remove()">×</button>
+  </div>`;
+}
+
+function buildCCPRibbon(){
+  return `<div class="ccp-ribbon" id="ccp-ribbon">
+    <span class="rib-text">Service is completed for Air Conditioner.</span>
+    <button class="rib-cta" onclick="ccpConfirm()">Confirm</button>
+    <button class="rib-dismiss" onclick="document.getElementById('ccp-ribbon').remove()">×</button>
+  </div>`;
+}
+
+function npsShowModal(){
+  const screen = document.querySelector('#screens .screen.active');
+  if(!screen || document.getElementById('nps-modal')) return;
+  const overlay = document.createElement('div');
+  overlay.className = 'modal-overlay';
+  overlay.id = 'nps-modal';
+  overlay.innerHTML = `
+    <div class="modal-box">
+      <div class="modal-icon">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-8.5 8.5 9 9 0 0 1-3.8-.8L3 21l1.9-5.2A8.38 8.38 0 0 1 4 11.5 8.5 8.5 0 0 1 12.5 3 8.38 8.38 0 0 1 21 11.5z"/></svg>
+      </div>
+      <h3>Feedback</h3>
+      <p>We would love to know your valuable feedback, based on your experience with Onsitego.</p>
+      <button class="btn full modal-cta" onclick="openNPSScreen()">Continue</button>
+    </div>`;
+  screen.appendChild(overlay);
+}
+
+function npsOK(){
+  const el = document.getElementById('nps-ribbon');
+  if(el) el.remove();
+  npsShowModal();
+}
+
+function openNPSScreen(){
+  document.getElementById('nps-modal')?.remove();
+  go('nps-screen');
+}
+
+/* ---- NPS RATING SCREEN ---- */
+SCREENS['nps-screen'] = ()=>`
+<div class="scroll" style="padding-bottom:40px">
+  <div class="pagehead">
+    <div class="back" onclick="go('home')">${I.back}</div>
+    <div><h2>SR Feedback</h2></div>
+  </div>
+
+  <div style="padding:0 20px 20px">
+    <p style="font-size:13px;color:var(--muted);line-height:1.6">On a scale of 0 to 10, how likely are you to recommend Onsitego to a friend or colleague?</p>
+  </div>
+
+  <div class="nps-bar">
+    <div class="nb" style="background:#c0392b" onclick="npsBarSelect(this,0)">0</div>
+    <div class="nb" style="background:#c0392b" onclick="npsBarSelect(this,1)">1</div>
+    <div class="nb" style="background:#c54326" onclick="npsBarSelect(this,2)">2</div>
+    <div class="nb" style="background:#d4530c" onclick="npsBarSelect(this,3)">3</div>
+    <div class="nb" style="background:#d4700c" onclick="npsBarSelect(this,4)">4</div>
+    <div class="nb" style="background:#c99010" onclick="npsBarSelect(this,5)">5</div>
+    <div class="nb" style="background:#b8a010" onclick="npsBarSelect(this,6)">6</div>
+    <div class="nb" style="background:#2980b9" onclick="npsBarSelect(this,7)">7</div>
+    <div class="nb" style="background:#2980b9" onclick="npsBarSelect(this,8)">8</div>
+    <div class="nb" style="background:#27ae60" onclick="npsBarSelect(this,9)">9</div>
+    <div class="nb" style="background:#1e8449" onclick="npsBarSelect(this,10)">10</div>
+  </div>
+
+  <div class="nps-zone">
+    <div class="nz" style="flex:7;background:#fdecea;">
+      <div class="nz-label" style="color:#c0392b">0 – 6  Detractor</div>
+      <div class="nz-sub" style="color:#c0392b">Unsatisfactory service experience</div>
+    </div>
+    <div class="nz" style="flex:2;background:#ebf5fb;">
+      <div class="nz-label" style="color:#2980b9">7 – 8  Neutral</div>
+      <div class="nz-sub" style="color:#2980b9">Good, But Not WOW</div>
+    </div>
+    <div class="nz" style="flex:2;background:#eafaf1;">
+      <div class="nz-label" style="color:#1e8449">9 – 10  Promoter</div>
+      <div class="nz-sub" style="color:#1e8449">WOW Experience</div>
+    </div>
+  </div>
+
+  <div id="nps-followup" style="display:none;padding:20px 20px 0">
+    <p id="nps-followup-msg" style="font-size:13px;color:var(--text);margin-bottom:14px;line-height:1.5"></p>
+    <button class="btn full" onclick="npsSubmit()">Submit Feedback</button>
+  </div>
+</div>`;
+
+function npsBarSelect(el, val){
+  document.querySelectorAll('.nb').forEach(b=>b.classList.remove('sel'));
+  el.classList.add('sel');
+  const fu = document.getElementById('nps-followup');
+  const msg = document.getElementById('nps-followup-msg');
+  if(!fu || !msg) return;
+  fu.style.display = 'block';
+  if(val <= 6) msg.textContent = 'We\'re sorry to hear that. Could you tell us what we could have done better?';
+  else if(val <= 8) msg.textContent = 'Thanks! What would make your experience even better?';
+  else msg.textContent = 'That\'s wonderful! We\'re thrilled you had a great experience. What did you love most?';
+}
+
+function npsSubmit(){
+  toast('Feedback submitted! Thank you 🙏');
+  setTimeout(()=>go('home'), 1000);
+}
+function ccpConfirm(){
+  document.getElementById('ccp-ribbon').remove();
+  toast('Service closure confirmed ✓');
+}
+
+/* ---- TRACK SR ---- */
+SCREENS['track-sr'] = ()=>`
+<div class="scroll" style="padding-bottom:60px">
+  ${head('SR Status','Air Conditioner')}
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start">
+      <div>
+        <div style="display:flex;align-items:center;gap:8px"><h3 style="font-size:16px;font-weight:700">SR #260504-00001</h3><span class="miniic" style="width:28px;height:28px" onclick="toast('SR number copied')">${I.copy}</span></div>
+        <div style="font-size:13px;color:var(--muted);margin-top:6px">Air Conditioner · Samsung</div>
+      </div>
+      ${currentScenario==='inactiveSR'
+        ? '<span class="pill closed-pill"><span class="d"></span>CLOSED</span>'
+        : currentScenario==='copaymentPending'
+          ? '<span class="pill" style="background:#fff3e0;color:#e65100"><span class="d" style="background:#e65100"></span>ON HOLD</span>'
+          : '<span class="pill live"><span class="d"></span>LIVE</span>'}
+    </div>
+    ${currentScenario==='copaymentPending' ? `<div style="display:flex;align-items:center;justify-content:space-between;background:var(--red-bg);padding:10px 14px;border-radius:12px;margin-top:12px"><span style="font-size:13px;font-weight:700;color:var(--red-text)">₹500 Copayment is pending</span><button class="btn sm yellow" onclick="toast('Opening payment gateway')">PAY</button></div>` : ''}
+    <div class="capsule">${I.calendar} Engineer Visit · 04 Jun 2026</div>
+  </div>
+
+  <div class="card" id="prog">
+    <div class="card-h" onclick="toggle('prog')"><h3>SR Progress</h3><span class="chev">${I.chevD}</span></div>
+    <div class="card-body">
+      <div class="kv" style="margin-top:10px"><span class="k">Status</span><span class="v" style="${currentScenario==='copaymentPending'?'color:var(--red-text)':''}">${currentScenario==='copaymentPending'?'Copayment Pending':'In Progress'}</span></div>
+      <div class="kv"><span class="k">Estimated Resolution</span><span class="v">06 Jun 2026</span></div>
+      <div class="tl">
+        <div class="item done"><div class="marker"><div class="mk"></div><div class="line"></div></div><div class="tx"><div class="t">Request Raised</div><div class="d">Your service request was created.</div></div></div>
+        <div class="item done"><div class="marker"><div class="mk"></div><div class="line"></div></div><div class="tx"><div class="t">Technician Assigned</div><div class="d">A certified engineer is assigned to you.</div></div></div>
+        <div class="item ${currentScenario==='inactiveSR'?'done':'now'}"><div class="marker"><div class="mk"></div><div class="line"></div></div><div class="tx"><div class="t">Visit Scheduled</div><div class="d">Engineer visited on 04 Jun 2026.</div></div></div>
+        <div class="item ${currentScenario==='inactiveSR'?'done':''}"><div class="marker"><div class="mk"></div><div class="line"></div></div><div class="tx"><div class="t">Repair In Progress</div><div class="d">Diagnosis &amp; repair of your appliance.</div></div></div>
+        <div class="item ${currentScenario==='inactiveSR'?'done':''}"><div class="marker"><div class="mk"></div></div><div class="tx"><div class="t">Resolved</div><div class="d">Service request closed successfully.</div></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card collapsed" id="docs">
+    <div class="card-h" onclick="toggle('docs')"><h3>Documents &amp; Images</h3><span class="chev">${I.chevD}</span></div>
+    <div class="card-body">
+      <div class="docrow"><div class="ic">${I.doc}</div><div class="info"><div class="t">Jobsheet — Visit 1</div><div class="s">PDF · 04 Jun 2026</div></div><div class="acts"><span class="miniic" onclick="toast('Opening jobsheet')">${I.view}</span><span class="miniic" onclick="toast('Downloading')">${I.download}</span></div></div>
+      <div class="docrow"><div class="ic">${I.img}</div><div class="info"><div class="t">Service Images</div><div class="s">Tap to verify these are correct</div></div><div class="acts"><span class="miniic" onclick="toast('Images confirmed ✓')">${I.check}</span><span class="miniic" onclick="toast('Reported — task created for CCO')">${I.escalate}</span></div></div>
+      <div class="docrow"><div class="ic">${I.rupee}</div><div class="info"><div class="t">Invoice</div><div class="s">Payment receipt</div></div><div class="acts"><span class="miniic" onclick="toast('Opening invoice')">${I.view}</span></div></div>
+      <div class="docrow"><div class="ic">${I.doc}</div><div class="info"><div class="t">Terms &amp; Conditions</div><div class="s">Plan TnC</div></div><div class="acts"><span class="miniic" onclick="toast('Opening TnC')">${I.view}</span></div></div>
+    </div>
+  </div>
+</div>
+<div class="sr-help-bar" onclick="showSRHelpSheet()">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 0 1 4.5 1.5c0 1.5-2 2-2 3.5M12 17h.01"/></svg>
+  <span>Need help with this SR?</span>
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+</div>
+${fab('Track SR Page')}`;
+
+function showSRHelpSheet(){
+  const screen = document.querySelector('#screens .screen.active');
+  const sheet = document.createElement('div');
+  sheet.className='sheet-overlay';
+  sheet.id='sr-help-sheet';
+  sheet.innerHTML=`
+  <div class="sheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-title">Need help with this SR?</div>
+    <div class="sheet-item" onclick="closeSheet();goChat('Track SR → Escalate')">
+      <div class="si-ic" style="background:var(--red-bg);color:var(--red-text)">${I.escalate}</div>
+      <div class="si-tx"><h4>Escalate</h4><p>Raise a concern about this service request</p></div>
+      ${I.chevR}
+    </div>
+    <div class="sheet-item" onclick="closeSheet();goChat('Track SR → Query')">
+      <div class="si-ic" style="background:var(--primary-pale);color:var(--primary)">${I.query}</div>
+      <div class="si-tx"><h4>Query</h4><p>Ask a question about this SR</p></div>
+      ${I.chevR}
+    </div>
+    <div class="sheet-item" onclick="closeSheet();toast('Cancel SR flow started')">
+      <div class="si-ic" style="background:#fdecec;color:var(--red-text)">${I.cancel}</div>
+      <div class="si-tx"><h4>Cancel SR</h4><p>Request cancellation of this service request</p></div>
+      ${I.chevR}
+    </div>
+    <div class="sheet-item" onclick="closeSheet();go('plan-detail')">
+      <div class="si-ic" style="background:var(--secondary-soft);color:var(--secondary-text)">${I.plan}</div>
+      <div class="si-tx"><h4>Plan Details</h4><p>View your plan coverage and documents</p></div>
+      ${I.chevR}
+    </div>
+  </div>`;
+  sheet.addEventListener('click', e=>{ if(e.target===sheet) closeSheet(); });
+  screen.appendChild(sheet);
+}
+function closeSheet(){
+  const s=document.getElementById('sr-help-sheet');
+  if(s) s.remove();
+}
+
+/* ---- PLANS ---- */
+SCREENS.plans = ()=>`
+<div class="scroll">
+  ${head('My Plans')}
+  <div class="tabs">
+    <div class="t on" onclick="switchTab(this,'pl-active')">Active</div>
+    <div class="t" onclick="switchTab(this,'pl-inactive')">Inactive</div>
+  </div>
+  <div class="tabpane on" id="pl-active">
+    <div class="plancard">
+      <div class="ph"><div class="pic">${I.ac}</div><div class="pt"><h4>AC Protect Plus</h4><div class="c">Air Conditioner · Samsung</div></div><span class="pill live"><span class="d"></span>Live</span></div>
+      <div class="daterow"><div class="dd"><div class="l">Start</div><div class="v">12 Jan 2026</div></div><div class="dd"><div class="l">End</div><div class="v">11 Jan 2028</div></div></div>
+      <span class="pmused">PM used · 1 of 3</span>
+      <div class="warn">${I.escalate} Copayment of ₹299 applicable on each SR</div>
+      <div class="coverage collapsed" id="cov1">
+        <div class="card-h" onclick="toggleCov('cov1')"><h3 style="font-size:14px">Coverage</h3><span class="chev">${I.chevD}</span></div>
+        <ul><li>${I.check} Gas refill &amp; compressor repair</li><li>${I.check} PCB &amp; electrical faults</li><li>${I.check} Free preventive maintenance visits</li></ul>
+        <span class="knowmore" onclick="go('plan-detail')">Know more →</span>
+      </div>
+      <div class="ctarow">
+        <button class="btn full" onclick="go('track-sr')">Track SR</button>
+        <button class="btn ghost full" onclick="go('plan-detail')">View Details</button>
+      </div>
+    </div>
+    <div class="plancard">
+      <div class="ph"><div class="pic">${I.wash}</div><div class="pt"><h4>Appliance Care</h4><div class="c">Washing Machine · LG</div></div><span class="pill live"><span class="d"></span>Live</span></div>
+      <div class="daterow"><div class="dd"><div class="l">Start</div><div class="v">02 Mar 2026</div></div><div class="dd"><div class="l">End</div><div class="v">01 Mar 2027</div></div></div>
+      <div class="warn">${I.escalate} Copayment applicable on each SR</div>
+      <div class="ctarow">
+        <button class="btn full" onclick="goChat('My Plans → Active → Raise SR')">Raise SR</button>
+        <button class="btn ghost full" onclick="go('plan-detail')">View Details</button>
+      </div>
+    </div>
+    <div class="helpbanner" onclick="goChat('My Plans → Active → Need Help')">
+      <div class="ic">${I.headset}</div><div class="tx"><h4>Need help with a plan?</h4><p>Chat with our support assistant</p></div>${I.chevR}
+    </div>
+  </div>
+  <div class="tabpane" id="pl-inactive">
+    <div class="plancard" style="opacity:.85">
+      <div class="ph"><div class="pic" style="background:#eee">${I.tv}</div><div class="pt"><h4>TV Extended Warranty</h4><div class="c">Television · Sony</div></div><span class="pill" style="background:#eee;color:#888"><span class="d" style="background:#888"></span>Expired</span></div>
+      <div class="daterow"><div class="dd"><div class="l">Start</div><div class="v">05 Jun 2024</div></div><div class="dd"><div class="l">End</div><div class="v">04 Jun 2025</div></div></div>
+      <div class="ctarow"><button class="btn ghost full" onclick="go('plan-detail')">View Details</button></div>
+    </div>
+    <div class="helpbanner" onclick="goChat('My Plans → Inactive → Need Help')">
+      <div class="ic">${I.headset}</div><div class="tx"><h4>Need help with a plan?</h4><p>Chat with our support assistant</p></div>${I.chevR}
+    </div>
+  </div>
+</div>
+${fab('My Plans')}
+${footer('plans')}`;
+
+/* ---- PLAN DETAIL ---- */
+SCREENS['plan-detail'] = ()=>`
+<div class="scroll">
+  ${head('Plan Details')}
+  <div class="card">
+    <div style="display:flex;gap:13px;align-items:flex-start">
+      <div style="width:50px;height:50px;border-radius:14px;background:var(--primary-tint);display:flex;align-items:center;justify-content:center;color:var(--primary)">${I.ac}</div>
+      <div style="flex:1"><h3 style="font-size:17px">AC Protect Plus</h3><div style="font-size:12px;color:var(--muted);margin-top:3px">Air Conditioner · Samsung</div></div>
+      <span class="pill live"><span class="d"></span>Live</span>
+    </div>
+    <div class="daterow"><div class="dd"><div class="l">Start</div><div class="v">12 Jan 2026</div></div><div class="dd"><div class="l">End</div><div class="v">11 Jan 2028</div></div></div>
+    <div class="kv" style="margin-top:10px"><span class="k">OSID</span><span class="v">OS-PLAN-2026-7741</span></div>
+    <div class="warn">${I.escalate} Copayment of ₹299 applicable on each SR</div>
+  </div>
+  <div class="card">
+    <h3 style="margin-bottom:8px">Plan Information</h3>
+    <div class="kv"><span class="k">Plan Type</span><span class="v">Extended Warranty</span></div>
+    <div class="kv"><span class="k">PM Visits</span><span class="v">1 of 3 used</span></div>
+    <div class="kv"><span class="k">Purchase Date</span><span class="v">12 Jan 2026</span></div>
+  </div>
+  <div class="card">
+    <h3 style="margin-bottom:8px">Coverage Details</h3>
+    <div style="font-size:12px;font-weight:700;color:var(--live-text);margin:6px 0 4px">COVERED</div>
+    <ul style="list-style:none"><li style="font-size:12px;padding:4px 0;display:flex;gap:8px">${I.check} Compressor &amp; gas refill</li><li style="font-size:12px;padding:4px 0;display:flex;gap:8px">${I.check} PCB &amp; electrical repair</li><li style="font-size:12px;padding:4px 0;display:flex;gap:8px">${I.check} Preventive maintenance</li></ul>
+    <div style="font-size:12px;font-weight:700;color:var(--red-text);margin:12px 0 4px">NOT COVERED</div>
+    <ul style="list-style:none"><li style="font-size:12px;padding:4px 0;display:flex;gap:8px;color:var(--muted)">${I.cancel} Physical / liquid damage</li><li style="font-size:12px;padding:4px 0;display:flex;gap:8px;color:var(--muted)">${I.cancel} Cosmetic wear &amp; tear</li></ul>
+  </div>
+  <div class="card">
+    <h3 style="margin-bottom:6px">Service Requests</h3>
+    <div class="docrow" onclick="go('track-sr')" style="cursor:pointer"><div class="ic">${I.ac}</div><div class="info"><div class="t">SR #260504-00001 <span class="pill live" style="font-size:9px;padding:2px 7px"><span class="d"></span>Live</span></div><div class="s">Created 02 Jun · ongoing</div></div>${I.chevR}</div>
+    <div class="docrow" onclick="go('track-sr')" style="cursor:pointer"><div class="ic">${I.ac}</div><div class="info"><div class="t">SR #260314-00042 <span class="pill" style="font-size:9px;padding:2px 7px;background:#eee;color:#888">Closed</span></div><div class="s">Created 14 Mar · Closed 16 Mar</div></div>${I.chevR}</div>
+  </div>
+  <div class="card">
+    <button class="btn full" onclick="goChat('Plan Detail → Raise New SR')">${I.clock.replace('#a07800','#fff').replace('width="26" height="26"','width="18" height="18"')}&nbsp; Raise New SR</button>
+    <button class="btn ghost full" style="margin-top:10px" onclick="goChat('Plan Detail → Support &amp; Query')">${I.headset.replace('#3266c9','var(--primary)').replace('width="26" height="26"','width="18" height="18"')}&nbsp; Help / Support</button>
+  </div>
+</div>
+${fab('Plan Detail Page')}`;
+
+/* ---- SERVICE REQUEST ---- */
+SCREENS['service-request'] = ()=>`
+<div class="scroll">
+  ${head('Service Requests')}
+  <div class="search">${I.search}<input placeholder="Search by SR number or category" oninput="toast('Searching…')"></div>
+  <div class="tabs">
+    <div class="t on" onclick="switchTab(this,'sr-active')">Active</div>
+    <div class="t" onclick="switchTab(this,'sr-inactive')">Inactive</div>
+  </div>
+  <div class="tabpane on" id="sr-active">
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start"><div style="display:flex;gap:11px;align-items:center"><div style="width:42px;height:42px;border-radius:12px;background:var(--primary-tint);display:flex;align-items:center;justify-content:center;color:var(--primary)">${I.ac}</div><div><h3 style="font-size:15px">Air Conditioner</h3><div style="font-size:12px;color:var(--muted)">SR #260504-00001</div></div></div><span class="pill live"><span class="d"></span>Live</span></div>
+      <div class="kv" style="margin-top:12px"><span class="k">Created On</span><span class="v">02 Jun 2026</span></div>
+      <div class="kv"><span class="k">Visit Date</span><span class="v">04 Jun 2026</span></div>
+      <div class="kv"><span class="k">Status</span><span class="v">Technician Assigned</span></div>
+      <div class="copay">${I.rupee}&nbsp; Copayment of ₹299 pending <button class="btn yellow sm" onclick="toast('Opening payment')">Pay Now</button></div>
+      <button class="btn full" style="margin-top:12px" onclick="go('track-sr')">Track SR</button>
+    </div>
+    <div class="card" style="text-align:center;border-style:dashed">
+      <button class="btn full" onclick="goChat('Service Request → Raise SR')">${I.clock.replace('#a07800','#fff').replace('width="26" height="26"','width="18" height="18"')}&nbsp; Raise a New Service Request</button>
+    </div>
+  </div>
+  <div class="tabpane" id="sr-inactive">
+    <div class="card" style="opacity:.92">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start"><div style="display:flex;gap:11px;align-items:center"><div style="width:42px;height:42px;border-radius:12px;background:#eee;display:flex;align-items:center;justify-content:center;color:#777">${I.wash}</div><div><h3 style="font-size:15px">Washing Machine</h3><div style="font-size:12px;color:var(--muted)">SR #260410-00031</div></div></div><span class="pill" style="background:#eee;color:#888"><span class="d" style="background:#888"></span>Closed</span></div>
+      <div class="kv" style="margin-top:12px"><span class="k">Created On</span><span class="v">10 Apr 2026</span></div>
+      <div class="kv"><span class="k">Closed On</span><span class="v">13 Apr 2026</span></div>
+      <div style="display:flex;gap:10px;margin-top:12px"><button class="btn ghost full" onclick="go('track-sr')">View Detail</button><button class="btn full" onclick="goChat('Service Request → Inactive → Reopen')">Raise Again</button></div>
+    </div>
+  </div>
+</div>
+${fab('Service Request Page')}
+${footer('sr')}`;
+
+/* ---- PROFILE ---- */
+SCREENS.profile = ()=>`
+<div class="scroll">
+  ${head('Profile')}
+  <div class="prof-hero"><div class="av">A</div><div><h3>Anurag</h3><p>+91 98XXX XXX12 · anurag@email.com</p></div></div>
+  <div class="menu">
+    <div class="mi" onclick="go('plans')"><div class="ic">${I.hexnav}</div><div class="t">My Plans</div><span class="ar">${I.chevR}</span></div>
+    <div class="mi" onclick="go('service-request')"><div class="ic">${I.file}</div><div class="t">My Service Requests</div><span class="ar">${I.chevR}</span></div>
+    <div class="mi" onclick="goChat('Profile → Support')"><div class="ic">${I.headset.replace('#3266c9','var(--primary)').replace('width="26" height="26"','width="20" height="20"')}</div><div class="t">Help &amp; Support</div><span class="ar">${I.chevR}</span></div>
+    <div class="mi" onclick="toast('Language settings')"><div class="ic">${I.globe}</div><div class="t">Language</div><span class="ar">${I.chevR}</span></div>
+    <div class="mi" onclick="toast('Manage addresses')"><div class="ic">${I.loc}</div><div class="t">Saved Addresses</div><span class="ar">${I.chevR}</span></div>
+  </div>
+  <div class="menu">
+    <div class="mi" onclick="toast('Logged out')"><div class="ic" style="background:var(--red-bg);color:var(--red-text)">${I.logout}</div><div class="t" style="color:var(--red-text)">Log Out</div></div>
+  </div>
+</div>
+${fab('Profile Page')}
+${footer('profile')}`;
+
+/* ---- CHATBOT ---- */
+SCREENS.chatbot = (source)=>`
+<div class="screen-inner" style="display:flex;flex-direction:column;height:100%;background:#ffffff">
+  <div class="chathead">
+    <div class="back" onclick="go('home')">${I.back}</div>
+    <div class="av">${I.headsetW}</div>
+    <div><div class="nm">Onsitego Assistant</div><div class="st"><span class="d"></span>Online now</div></div>
+  </div>
+  <div class="chatbody">
+    <div class="entrytag">Entered from: ${source||'Floating icon'}</div>
+  </div>
+  <div class="quickreplies"></div>
+  <div class="chatinput">
+    <input id="chatfield" placeholder="Type your message…" onkeydown="if(event.key==='Enter')sendChat()">
+    <div class="send" onclick="sendChat()">${I.send}</div>
+  </div>
+</div>`;
+
+/* ============ NAV ============ */
+const mount = document.getElementById('screens');
+function render(html){ mount.innerHTML = `<div class="screen active">${html}</div>`; mount.firstChild.scrollTop=0; }
+function go(id){ render(SCREENS[id]()); }
+function goChat(source){ render(SCREENS.chatbot(source)); chatBoot(source); }
+function toggle(id){ document.getElementById(id).classList.toggle('collapsed'); }
+function toggleCov(id){ document.getElementById(id).classList.toggle('collapsed'); }
+function switchTab(el,pane){
+  el.parentNode.querySelectorAll('.t').forEach(t=>t.classList.remove('on'));
+  el.classList.add('on');
+  const wrap = el.closest('.scroll');
+  wrap.querySelectorAll('.tabpane').forEach(p=>p.classList.remove('on'));
+  wrap.querySelector('#'+pane).classList.add('on');
+}
+let toastT;
+function toast(msg){
+  const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show');
+  clearTimeout(toastT); toastT=setTimeout(()=>t.classList.remove('show'),1800);
+}
+
+/* ============ CHATBOT ENGINE ============ */
+const CATS = {
+  AC:{label:'Air Conditioner',plans:[
+    {name:'AMC',brand:'Samsung',start:'12 Jan 2026',end:'11 Jan 2027',lastSR:'14 Mar 2026',openSR:null,copay:299},
+    {name:'AC Annual Plan',brand:'Samsung',start:'12 Jan 2026',end:'11 Jan 2028',lastSR:'No SR yet',openSR:null,copay:299}
+  ],issues:['Need Service','Not Cooling','Strange Noise','Not Working']},
+  WM:{label:'Washing Machine',plans:[
+    {name:'Appliance Care',brand:'LG',start:'02 Mar 2026',end:'01 Mar 2027',lastSR:'No SR yet',openSR:null,copay:299}
+  ],issues:['Not Draining','Not Spinning','Strange Noise','Not Working']},
+  REF:{label:'Refrigerator',plans:[
+    {name:'Cooling Secure',brand:'Whirlpool',start:'20 Feb 2026',end:'19 Feb 2028',lastSR:'No SR yet',openSR:null,copay:0}
+  ],issues:['Not Cooling','Water Leakage','Strange Noise','Not Working']},
+  TV:{label:'Television',plans:[
+    {name:'TV Protect',brand:'Sony',start:'05 Jan 2026',end:'04 Jan 2028',lastSR:'18 May 2026',openSR:'260518-00045',copay:0}
+  ],issues:['No Display','No Power','Strange Noise','Not Working']}
+};
+const CATICON={AC:I.ac,WM:I.wash,REF:I.fridge,TV:I.tv};
+const PRESET_ADDR='Flat 1203, Palm Grove Society<br>Powai, Mumbai – 400076';
+let SR={},chatStage=null,supportTopic=null;
+
+function cbBody(){return document.querySelector('.chatbody');}
+function cbOpts(){return document.querySelector('.quickreplies');}
+function scrollDown(){const b=cbBody();if(b)b.scrollTop=b.scrollHeight;}
+function bot(html){cbBody().insertAdjacentHTML('beforeend',`<div class="bubble bot">${html}</div>`);scrollDown();}
+function usr(txt){cbBody().insertAdjacentHTML('beforeend',`<div class="bubble user">${txt}</div>`);scrollDown();}
+function botCard(html){cbBody().insertAdjacentHTML('beforeend',`<div class="botcard">${html}</div>`);scrollDown();}
+function botEl(html){cbBody().insertAdjacentHTML('beforeend',html);scrollDown();}
+function clearOpts(){const o=cbOpts();if(o)o.innerHTML='';}
+function opts(list){
+  const o=cbOpts();o.innerHTML=list.map((x,i)=>`<div class="qr" data-i="${i}">${x.label}</div>`).join('');
+  [...o.children].forEach((el,i)=>el.onclick=()=>{if(list[i].echo!==false)usr(list[i].label);clearOpts();list[i].fn();});
+}
+function typing(cb,delay=650){
+  cbBody().insertAdjacentHTML('beforeend',`<div class="bubble bot typing" id="typing">typing…</div>`);scrollDown();
+  setTimeout(()=>{const t=document.getElementById('typing');if(t)t.remove();cb();},delay);
+}
+function chatBoot(source){
+  chatStage=null;SR={source};
+  if(/raise sr|raise new sr|raise a new|reopen/i.test(source))startSRFlow(source);
+  else if(/customer feedback/i.test(source)) feedbackBoot();
+  else genericBoot();
+}
+
+/* ---- FEEDBACK FLOW ---- */
+function feedbackBoot(){
+  bot("Hi Anurag 👋 We value your opinion!");
+  typing(()=>{
+    bot('What would you like to share feedback about?');
+    opts([
+      {label:'⭐ Recent Service Request', fn:()=>feedbackSRRating()},
+      {label:'🛒 Plan Purchase Experience', fn:()=>feedbackGeneric('Plan Purchase Experience')},
+      {label:'📱 App / Website', fn:()=>feedbackGeneric('App / Website')},
+      {label:'💬 General Feedback', fn:()=>feedbackGeneric('General Feedback')}
+    ]);
+  });
+}
+
+function feedbackSRRating(){
+  typing(()=>{
+    bot('How was your recent service experience for your <b>Air Conditioner</b>?<br>Pick an emoji that best describes it:');
+    botCard(`<div style="display:flex;justify-content:space-around;padding:8px 0;font-size:30px">
+      <span style="cursor:pointer" onclick="emojiRating(this,'😤','Very dissatisfied')" title="Very dissatisfied">😤</span>
+      <span style="cursor:pointer" onclick="emojiRating(this,'😕','Dissatisfied')" title="Dissatisfied">😕</span>
+      <span style="cursor:pointer" onclick="emojiRating(this,'😐','Neutral')" title="Neutral">😐</span>
+      <span style="cursor:pointer" onclick="emojiRating(this,'😊','Satisfied')" title="Satisfied">😊</span>
+      <span style="cursor:pointer" onclick="emojiRating(this,'🤩','Very satisfied')" title="Very satisfied">🤩</span>
+    </div>
+    <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--muted);padding:0 4px">
+      <span>Very poor</span><span>Excellent</span>
+    </div>`);
+    clearOpts();
+  });
+}
+
+function emojiRating(el, emoji, label){
+  // highlight selected
+  el.parentNode.querySelectorAll('span').forEach(s=>s.style.opacity='.3');
+  el.style.opacity='1';el.style.transform='scale(1.3)';
+  usr(`${emoji} ${label}`);
+  typing(()=>{
+    bot(`Thanks for sharing "${label}" — that means a lot to us!`);
+    bot('One more quick question: On a scale of 0–10, how likely are you to recommend Onsitego to a friend?');
+    botCard(`<div>
+      <div style="display:flex;gap:3px;flex-wrap:wrap;justify-content:center;padding:4px 0" id="nps-btns">
+        ${[0,1,2,3,4,5,6,7,8,9,10].map(n=>`<button onclick="npsPickChat(this,${n})" style="width:34px;height:34px;border-radius:8px;border:1px solid var(--line);background:#fff;font-size:12px;cursor:pointer;font-family:inherit;transition:.15s">${n}</button>`).join('')}
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:9px;color:var(--muted);margin-top:4px;padding:0 2px">
+        <span>Not at all likely</span><span>Extremely likely</span>
+      </div>
+    </div>`);
+    clearOpts();
+  });
+}
+
+function npsPickChat(el, val){
+  document.querySelectorAll('#nps-btns button').forEach(b=>{b.style.background='#fff';b.style.color='inherit';});
+  el.style.background='var(--primary)';el.style.color='#fff';
+  usr(`Score: ${val}`);
+  typing(()=>{
+    const msg = val>=9 ? "That's wonderful — thank you for being our advocate! 🎉"
+                : val>=7 ? "Thanks for the feedback! We'll work hard to earn a 10 next time."
+                : "Thank you for your honesty. We'll use this to improve our service.";
+    bot(msg);
+    bot('Would you like to tell us more about your experience?');
+    chatStage='support'; supportTopic='Feedback';
+    opts([{label:'Add a comment',fn:()=>{ chatStage='support';typing(()=>bot('Please go ahead and type your comment below.'));}},{label:'No, that\'s all',fn:()=>{chatStage=null;typing(()=>{bot('Thanks Anurag! Your feedback has been recorded. 🙏');opts([{label:'Back to Home',fn:()=>go('home')}]);});}}]);
+  });
+}
+
+function feedbackGeneric(topic){
+  typing(()=>{
+    bot(`Thanks for choosing to share your <b>${topic}</b> feedback!`);
+    bot('How would you rate your experience? (1 = Poor, 5 = Excellent)');
+    botCard(`<div style="display:flex;justify-content:space-around;padding:8px 0;font-size:26px">
+      ${[1,2,3,4,5].map(n=>`<span style="cursor:pointer" onclick="genericRating(this,${n},'${topic}')">${'★'.repeat(n)+'☆'.repeat(5-n)}</span>`).join('')}
+    </div>`);
+    clearOpts();
+  });
+}
+
+function genericRating(el, n, topic){
+  el.parentNode.querySelectorAll('span').forEach(s=>s.style.opacity='.35');
+  el.style.opacity='1';
+  usr(`${n} star${n>1?'s':''}`);
+  typing(()=>{
+    bot(`${n>=4?'Great to hear that! 🌟':'Thanks for the honest rating.'} What could we do better? (optional)`);
+    const questions = {
+      'Plan Purchase Experience':['Easy onboarding','Clear pricing','Good plan options','Quick activation'],
+      'App / Website':['Easy to navigate','Fast & responsive','Helpful information','Good design'],
+      'General Feedback':['Overall happy','Needs improvement','Great support team','Easy to use']
+    };
+    const qs = questions[topic]||['Easy process','Helpful team','Good communication','Quick resolution'];
+    botCard(`<div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:8px">Select all that apply:</div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap">${qs.map(q=>`<button class="ccp-opt" onclick="this.classList.toggle('sel');this.style.background=this.classList.contains('sel')?'var(--primary)':'var(--primary-pale)';this.style.color=this.classList.contains('sel')?'#fff':'var(--primary)'">${q}</button>`).join('')}</div>
+      <button class="btn full" style="margin-top:10px" onclick="submitGenericFeedback()">Submit</button>
+    </div>`);
+    clearOpts();
+  });
+}
+
+function submitGenericFeedback(){
+  usr('Feedback submitted');
+  typing(()=>{
+    bot('Thank you for your feedback! 🙏 It helps us build a better experience for you.');
+    opts([{label:'Back to Home',fn:()=>go('home')}]);
+  });
+}
+function genericBoot(){
+  bot("Hi Anurag 👋 I'm your Onsitego assistant.");
+  typing(()=>supportMenu());
+}
+
+/* ---- HINDI SR FLOW ---- */
+function detectHindiSR(text){
+  return /mujhe|repair karan|kharab|nahi chal|band ho|dikkat|problem/i.test(text) &&
+         /ac|air.?condition|thanda|washing|fridge|tv|television/i.test(text);
+}
+function hindiSRBoot(){
+  SR = { source:'Hindi Chat', category:'AC', plan:CATS['AC'].plans[0], issue:null, mode:'Engineer Visit', media:false, appt:null };
+  const p = CATS['AC'].plans[0];
+  typing(()=>{
+    bot('Aapka yeh plan mila:');
+    botCard(`
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px">
+        <div class="pp-ic">${I.ac}</div>
+        <div class="pp-tx">
+          <div class="pp-name">${p.name} — Air Conditioner</div>
+          <div class="pp-sub">${p.brand}</div>
+          <div class="pp-meta">Valid: ${p.start} – ${p.end}</div>
+        </div>
+      </div>
+      <div style="font-size:13px;font-weight:700;color:var(--primary)">Kya apko is plan ke lye repair karana hai?</div>
+    `);
+    chatStage = 'hindi-plan-confirm';
+    opts([
+      {label:'Haan', fn:()=>{ chatStage=null; hindiAskIssue(); }},
+      {label:'Nahi, doosra plan choose karna hai', fn:()=>{ chatStage=null; bot('Theek hai, please ek agent se baat kijiye.'); opts([{label:'Back to Home', fn:()=>go('home')}]); }}
+    ]);
+  });
+}
+function hindiAskIssue(){
+  chatStage = 'hindi-issue';
+  typing(()=>{
+    bot('ok, kya aap bata sakte ho ki kya problem hai.');
+    opts([
+      ...CATS['AC'].issues.map(iss=>({label:iss, fn:()=>hindiIssuePicked(iss)})),
+      {label:'Kuch aur', fn:()=>{ chatStage='hindi-issue'; typing(()=>bot('Please problem describe kijiye.')); }}
+    ]);
+  });
+}
+function hindiIssuePicked(iss){
+  chatStage = null;
+  SR.issue = iss;
+  clearOpts();
+  typing(()=>{
+    bot('ok. apna address confirm kijiye.');
+    setTimeout(()=>addressStep(), 700);
+  });
+}
+function supportMenu(){
+  chatStage='support';supportTopic='General Query';
+  bot('How can I help you today?');
+  opts([
+    {label:'1. Create Service Request',fn:()=>startSRFlow('Support → Create Service Request')},
+    {label:'2. Check Plan Details',fn:()=>go('plans')},
+    {label:'3. Service Request Status',fn:()=>srStatusList()},
+    {label:'4. Payment / Refund',fn:()=>supportElaborate('Payment / Refund',true)},
+    {label:'5. Escalation & Support',fn:()=>supportElaborate('Escalation & Support')},
+    {label:'6. Replacement',fn:()=>supportElaborate('Replacement')},
+    {label:'7. Feedback',fn:()=>supportElaborate('Feedback')},
+    {label:'8. General Query',fn:()=>supportElaborate('General Query')}
+  ]);
+}
+function srStatusList(){
+  chatStage=null;
+  typing(()=>{
+    bot('Here are your active service requests:');
+    opts([
+      {label:'AC #260504-00001 · Technician Assigned',fn:()=>go('track-sr')},
+      {label:'Refrigerator #260502-00007 · Closure Pending',fn:()=>go('track-sr')},
+      {label:'⬅ Main menu',fn:()=>supportMenu()}
+    ]);
+  });
+}
+function supportElaborate(topic,showSRs){
+  supportTopic=topic;chatStage='support';
+  typing(()=>{
+    bot(`Sure — please describe your ${topic.toLowerCase()} concern.`);
+    const list=[];
+    if(showSRs){
+      bot('You can also pick the related request:');
+      list.push({label:'AC #260504-00001 (Active)',fn:()=>{chatStage='support';typing(()=>bot('Noted — regarding <b>SR #260504-00001</b>. Please describe the issue.'));}});
+    }
+    list.push({label:'⬅ Main menu',fn:()=>supportMenu()});
+    opts(list);
+  });
+}
+function handleSupportText(v){
+  const topic=supportTopic;chatStage=null;
+  typing(()=>{
+    if(topic==='Feedback'){
+      const tk='CRM-'+(Math.floor(Math.random()*9000)+1000);
+      bot(`Thank you! Feedback logged — ticket <b>#${tk}</b> created.`);
+      opts([{label:'⬅ Main menu',fn:()=>supportMenu()},{label:'Back to Home',fn:()=>go('home')}]);
+    } else if(topic==='Payment / Refund'){
+      bot("Thanks. If this hasn't resolved your concern, I can arrange a callback.");
+      opts([{label:'Arrange a callback',fn:()=>callbackMock()},{label:'⬅ Main menu',fn:()=>supportMenu()}]);
+    } else if(topic==='Replacement'){
+      bot("Replacement request noted. Our team will verify eligibility and update you.");
+      opts([{label:'Arrange a callback',fn:()=>callbackMock()},{label:'⬅ Main menu',fn:()=>supportMenu()}]);
+    } else if(topic==='Escalation & Support'){
+      bot("Concern escalated — you'll receive an update shortly.");
+      opts([{label:'Chat with agent',fn:()=>agentMock()},{label:'Arrange a callback',fn:()=>callbackMock()},{label:'⬅ Main menu',fn:()=>supportMenu()}]);
+    } else {
+      bot("Here's what I found. If you need more help, I can connect you with an agent.");
+      opts([{label:'Chat with agent',fn:()=>agentMock()},{label:'⬅ Main menu',fn:()=>supportMenu()},{label:'Back to Home',fn:()=>go('home')}]);
+    }
+  });
+}
+const PRE={'My Plans → Active → Raise SR':'WM','Plan Detail → Raise New SR':'AC'};
+function startSRFlow(source){
+  SR={source,category:null,plan:null,issue:null,mode:null,media:false,appt:null};
+  SR.support=/support/i.test(source);chatStage=null;
+  bot("Hi Anurag 👋 Let's raise a service request together.");
+  typing(()=>{
+    const pre=PRE[source];
+    if(pre){SR.category=pre;const c=CATS[pre];SR.plan=c.plans[0];
+      bot(`You're raising this from your <b>${c.plans[0].name}</b> plan — ${c.label} · ${c.plans[0].brand}. Continue?`);
+      opts([{label:'Yes, continue',fn:()=>planSelected()},{label:'Choose a different one',fn:()=>{SR.plan=null;SR.category=null;askCategory(true);}}]);
+    } else {askCategory(true);}
+  });
+}
+function askCategory(intro){
+  if(intro)bot('Here are devices with active plans. Select one:');
+  const list=Object.keys(CATS).map(k=>({label:CATS[k].label,fn:()=>listPlans(k)}));
+  list.push({label:"Can't find my category",fn:()=>cantFind()});
+  opts(list);
+}
+function listPlans(k){
+  SR.category=k;const c=CATS[k];
+  typing(()=>{
+    bot(`Plans under <b>${c.label}</b>:`);
+    c.plans.forEach((p,i)=>botEl(planPickCard(k,p,i)));
+    opts([{label:"Can't find my plan",fn:()=>cantFind()}]);
+  });
+}
+function planPickCard(k,p,i){
+  return `<div class="planpick" onclick="choosePlan(${i})">
+    <div class="pp-ic">${CATICON[k]}</div>
+    <div class="pp-tx"><div class="pp-name">${p.name}</div><div class="pp-sub">${CATS[k].label} · ${p.brand}</div><div class="pp-meta">Valid ${p.start} – ${p.end}</div><div class="pp-meta">Last SR: ${p.lastSR}</div></div>
+    <span class="pp-go">${I.chevR}</span>
+  </div>`;
+}
+function choosePlan(i){SR.plan=CATS[SR.category].plans[i];clearOpts();usr(`Selected: ${SR.plan.name}`);planSelected();}
+function planSelected(){
+  if(SR.plan.openSR){
+    typing(()=>{bot(`This plan already has open SR <b>#${SR.plan.openSR}</b>. Track it below.`);opts([{label:'Track existing SR',fn:()=>go('track-sr')},{label:'Back to Home',fn:()=>go('home')}]);});
+  } else askIssue();
+}
+function askIssue(){
+  const c=CATS[SR.category];
+  typing(()=>{bot(`What issue are you facing with your ${c.label}?`);opts(c.issues.map(iss=>({label:iss,fn:()=>pickIssue(iss)})).concat([{label:'Others',fn:()=>pickIssue('Others')}]));chatStage='issue';});
+}
+function pickIssue(iss){if(iss==='Others'){chatStage='issue';typing(()=>bot("Please describe the issue."));return;}chatStage=null;SR.issue=iss;troubleshoot();}
+function handleIssueText(v){
+  if(v.length<3){typing(()=>{bot('Could you describe the issue in more detail?');chatStage='issue';});return;}
+  chatStage=null;SR.issue=v;
+  typing(()=>{bot(`Got it — noted as "<b>${v}</b>".`);troubleshoot();});
+}
+function troubleshoot(){
+  typing(()=>{bot('Try remote tech support or go straight to an engineer visit?');opts([{label:'Tech Support',fn:()=>media('Tech Support')},{label:'Engineer Visit',fn:()=>media('Engineer Visit')}]);});
+}
+function media(mode){
+  SR.mode=mode;
+  typing(()=>{bot('You can share photos or a short video. (Optional)');opts([{label:'📎 Upload media',fn:()=>{SR.media=true;typing(()=>{bot('📷 2 files received. Thanks!');addressStep();});}},{label:'Skip for now',fn:()=>addressStep()}]);});
+}
+function addressStep(){
+  typing(()=>{bot(`Use your last service address?<br><br>📍 <b>${PRESET_ADDR}</b>`);opts([{label:'Use this address',fn:()=>mapStep()},{label:'Add new address',fn:()=>newAddr()}]);});
+}
+function mapStep(){
+  typing(()=>{
+    bot('Confirm your exact location:');
+    clearOpts();
+    const screen = document.querySelector('#screens .screen.active');
+    const overlay = document.createElement('div');
+    overlay.className = 'map-overlay';
+    overlay.id = 'map-overlay';
+    overlay.innerHTML = `
+      <div class="map-overlay-head">
+        <div class="mob" onclick="closeMapOverlay(false)">${I.back}</div>
+        <div class="pin-box">
+          <div class="pin-lbl">Pincode</div>
+          <div class="pin-val">400 076</div>
+        </div>
+      </div>
+      <div class="map-area">
+        <div class="map-road-h"></div>
+        <div class="map-road-v"></div>
+        <div class="map-block" style="top:12%;left:10%;width:32%;height:22%"></div>
+        <div class="map-block" style="top:12%;right:8%;width:28%;height:18%"></div>
+        <div class="map-block" style="bottom:14%;left:8%;width:25%;height:20%"></div>
+        <div class="map-block" style="bottom:10%;right:10%;width:34%;height:24%"></div>
+        <div class="map-block" style="top:55%;left:10%;width:18%;height:14%"></div>
+        <div class="map-pin-wrap">
+          <div class="pin-icon"><svg width="36" height="36" viewBox="0 0 24 24" fill="#d64545" stroke="#fff" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3" fill="#fff" stroke="none"/></svg></div>
+          <div class="pin-pulse"></div>
+        </div>
+        <div class="map-addr-chip">📍 Palm Grove Society, Powai</div>
+      </div>
+      <div class="map-overlay-foot">
+        <button class="btn ghost full" onclick="closeMapOverlay(false)">Cancel</button>
+        <button class="btn full" onclick="closeMapOverlay(true)">Confirm Location</button>
+      </div>`;
+    screen.appendChild(overlay);
+  });
+}
+function closeMapOverlay(confirmed){
+  const o = document.getElementById('map-overlay');
+  if(o) o.remove();
+  if(confirmed){
+    usr('📍 Location confirmed');
+    typing(()=>{ bot('Location saved ✓'); copayStep(); });
+  }
+}
+function newAddr(){
+  typing(()=>{bot('Enter your new address:');botCard(`<div class="addrform"><input placeholder="Flat / House no."><input placeholder="Society / Building"><input placeholder="Area / Locality"><input placeholder="Landmark"><div class="row"><input placeholder="Pincode"><input placeholder="City"></div><input placeholder="State"><button class="btn full" onclick="saveAddr()">Save &amp; continue</button></div>`);clearOpts();});
+}
+function saveAddr(){usr('New address saved');typing(()=>{bot('Address saved ✓');mapStep();});}
+function copayStep(){
+  const cp=SR.plan.copay;
+  if(!cp){apptStep();return;}
+  typing(()=>{bot(`A copayment of <b>₹${cp}</b> is applicable as per your plan.`);opts([{label:`Pay ₹${cp} now`,fn:()=>razorpay()},{label:'Know more',fn:()=>copayInfo()}]);});
+}
+function copayInfo(){
+  typing(()=>{bot("Copayment is defined in your plan's T&C.");opts([{label:`Pay ₹${SR.plan.copay} now`,fn:()=>razorpay()},{label:'View plan details',fn:()=>go('plan-detail')}]);});
+}
+function razorpay(){
+  typing(()=>{botCard(`<div class="rzp"><div class="rzp-h">Razorpay <span>SECURE</span></div><div class="rzp-b"><div class="rzp-amt">₹${SR.plan.copay}.00</div><div class="rzp-row">UPI · Cards · Netbanking · Wallets</div><button class="btn full" onclick="payDone()">Pay ₹${SR.plan.copay}</button></div></div>`);clearOpts();},500);
+}
+function payDone(){SR.copayPaid=true;usr(`Paid ₹${SR.plan.copay}`);typing(()=>{bot('✅ Payment successful!');apptStep();});}
+function apptStep(){
+  typing(()=>{bot('Pick an appointment date:');opts([{label:'Tomorrow · 03 Jun',fn:()=>created('03 Jun 2026')},{label:'Wed · 04 Jun',fn:()=>created('04 Jun 2026')},{label:'Thu · 05 Jun',fn:()=>created('05 Jun 2026')},{label:'No preference',fn:()=>created(null)}]);});
+}
+function created(date){
+  SR.appt=date;
+  const num='260602-'+String(Math.floor(Math.random()*90000)+10000);
+  typing(()=>{
+    bot('🎉 Your service request has been created!');
+    const c=CATS[SR.category];
+    botCard(`<div class="srsum-top"><div><div class="srsum-no">SR #${num}</div><div class="srsum-cat">${c.label} · ${SR.plan.brand}</div></div><span class="pill live"><span class="d"></span>LIVE</span></div>
+      <div class="kv"><span class="k">Plan</span><span class="v">${SR.plan.name}</span></div>
+      <div class="kv"><span class="k">Issue</span><span class="v">${SR.issue}</span></div>
+      <div class="kv"><span class="k">Mode</span><span class="v">${SR.mode}</span></div>
+      <div class="kv"><span class="k">Appointment</span><span class="v">${date||'To be scheduled'}</span></div>
+      <div class="kv"><span class="k">Copayment</span><span class="v">${SR.plan.copay?('₹'+SR.plan.copay+' · Paid'):'Not applicable'}</span></div>`);
+    const end=[{label:'Track this SR',fn:()=>go('track-sr')},{label:'Back to Home',fn:()=>go('home')}];
+    if(SR.support)end.splice(1,0,{label:'⬅ Support menu',fn:()=>supportMenu()});
+    opts(end);
+  },750);
+}
+function cantFind(){
+  typing(()=>{bot("Let's try to find your plan via another way:");opts([{label:'Try another mobile',fn:()=>{chatStage='mobile';typing(()=>bot('Enter the alternate mobile number. An OTP will be sent.'));}},{label:'Enter email ID',fn:()=>{chatStage='email';typing(()=>bot("Enter the email linked to your plan."));}},{label:'Enter invoice no.',fn:()=>{chatStage='invoice';typing(()=>bot('Enter the invoice number from your receipt.'));}},{label:'Chat with agent',fn:()=>agentMock()},{label:'Request callback',fn:()=>callbackMock()}]);});
+}
+function cantFindOutcome(msg){
+  typing(()=>{bot(msg);opts([{label:'Chat with agent',fn:()=>agentMock()},{label:'Request callback',fn:()=>callbackMock()},{label:'Start over',fn:()=>goChat(SR.source)}]);});
+}
+function agentMock(){typing(()=>{bot('🟢 Connecting you to a support agent…');opts([{label:'Back to Home',fn:()=>go('home')}]);});}
+function callbackMock(){typing(()=>{bot('📞 Callback requested! Our team will call you on +91 98XXX XXX12 shortly.');opts([{label:'Back to Home',fn:()=>go('home')}]);});}
+function sendChat(){
+  const f=document.getElementById('chatfield');const v=(f.value||'').trim();if(!v)return;
+  usr(v);f.value='';
+  if(chatStage==='hindi-plan-confirm'){
+    chatStage=null;clearOpts();
+    if(/^(haan|ha|yes|ji|hna|han)$/i.test(v.trim())){ hindiAskIssue(); }
+    else { bot('Kripya "Haan" ya "Nahi" mein jawab dijiye.'); chatStage='hindi-plan-confirm'; }
+    return;
+  }
+  if(chatStage==='hindi-issue'){clearOpts();hindiIssuePicked(v);return;}
+  if(chatStage==='issue'){handleIssueText(v);return;}
+  if(chatStage==='mobile'||chatStage==='email'){chatStage='otp';typing(()=>{bot('OTP sent. Enter the 6-digit code.');});return;}
+  if(chatStage==='otp'){chatStage=null;cantFindOutcome('No additional plans found. Connect with an agent?');return;}
+  if(chatStage==='invoice'){chatStage=null;cantFindOutcome("Invoice not matched. Let me connect you with someone who can help.");return;}
+  if(chatStage==='support'){handleSupportText(v);return;}
+  if(!chatStage && detectHindiSR(v)){hindiSRBoot();return;}
+  supportTopic=supportTopic||'General Query';handleSupportText(v);
+}
+
+/* boot → dashboard */
+showDashboard();
+</script>
+</body>
+</html>
